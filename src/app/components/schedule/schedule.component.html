@@ -1,0 +1,13 @@
+<div class="schedule-container">
+  <div class="day-column" *ngFor="let day of days">
+    <div class="day-header">{{ day | date: 'yyyyMMdd' }}</div>
+    <div class="time-slot" *ngFor="let slot of timeSlots; let i = index">
+      <div class="slot-time">{{ slot }}</div>
+      <div class="meetings">
+        <div class="meeting" *ngFor="let meeting of getMeetingsForTime(day, i)">
+          {{ meeting.title }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
