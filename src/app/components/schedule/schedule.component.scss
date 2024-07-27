@@ -24,25 +24,22 @@
   .slot-time {
     position: absolute;
     left: 0;
-    font-size: 12px;
     width: 50px;
   }
   
   .meetings {
-    position: relative;
-    margin-left: 60px;
+    display: flex;
   }
   
+  .meetings-container {
+    margin-left: 40px;
+  }
+
   .meeting {
-    position: absolute;
-    left: 0;
-    right: 0;
     background-color: lightblue;
     border: 1px solid blue;
     padding: 2px;
-    margin: 2px 0;
-    font-size: 12px;
-    line-height: 1.2;
     box-sizing: border-box;
+    text-overflow: ellipsis;
   }
   

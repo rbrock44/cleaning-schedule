@@ -16,6 +16,8 @@ export class ScheduleComponent implements OnInit {
   meetings = [
     { date: '2024-07-29', startTime: '07:30', endTime: '08:00', title: 'Meeting 1' },
     { date: '2024-07-29', startTime: '08:00', endTime: '09:00 ', title: 'Meeting 2' },
+    { date: '2024-07-29', startTime: '13:00', endTime: '13:30 ', title: 'Meeting 3' },
+    { date: '2024-07-29', startTime: '12:00', endTime: '14:00 ', title: 'Meeting 4' },
     // Add more meetings as needed
   ];
 
