@@ -14,6 +14,15 @@
     padding: 10px;
     background-color: #f0f0f0;
   }
+
+  .day-column:first-child {
+    border-top-left-radius: 0.3rem;
+  }
+
+  .day-column:last-child {
+    border-top-right-radius: 0.3rem;
+    border: 1px solid #ddd;
+  }
   
   .time-slot {
     border-bottom: 1px solid #ddd;
@@ -36,6 +45,7 @@
   }
 
   .meeting {
+    border-radius: 0.3rem;
     background-color: lightblue;
     border: 1px solid blue;
     padding: 2px;
@@ -43,3 +53,41 @@
     text-overflow: ellipsis;
   }
   
+  .arrow-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  .arrow-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+  }
+  
+  .arrow-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .left-arrow {
+    margin-right: auto;
+  }
+  
+  .right-arrow {
+    margin-left: auto;
+  }
+  
+  span {
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+  
+  .arrow-btn:hover span {
+    transform: scale(1.1);
+  }
