@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Meeting } from '../../type/meeting.type';
 import { Person, Shades } from '../../type/person.type';
 import { getRandomColor, lightenColor } from '../../utility/color/color';
+import { formatDate, formatTime, getClosestMonday } from '../../utility/date/date';
 
 @Component({
   standalone: true,
@@ -25,7 +26,7 @@ export class ScheduleComponent implements OnInit {
     // Add more meetings as needed
   ];
   daysToJumpOnArrowClick: number = 7;
-  startDate = this.getClosestMonday();
+  startDate = getClosestMonday();
 
   personColors: { [name: string]: Person } = {};
 
@@ -64,7 +65,7 @@ export class ScheduleComponent implements OnInit {
       const currentDate: Date = new Date(this.startDate);
       currentDate.setDate(this.startDate.getDate() + i);
       currentDate.setHours(12);
-      this.days.push(this.formatDate(currentDate));
+      this.days.push(formatDate(currentDate));
     }
   }
 
@@ -78,17 +79,11 @@ export class ScheduleComponent implements OnInit {
 
     while (startTime < endTime) {
       this.timeSlots.push({
-        value: this.formatTime(startTime),
-        display: this.formatTime(startTime, false)
+        value: formatTime(startTime),
+        display: formatTime(startTime, false)
       });
       startTime.setMinutes(startTime.getMinutes() + 30);
     }
-  }
-
-  formatTime(date: Date, is24Hour: boolean = true): string {
-    const hours: number = is24Hour ? date.getHours() : (date.getHours() % 12 || 12);
-    const minutes: string = date.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
   }
 
   getMeetingsForTime(day: string, slotIndex: number) {
@@ -127,13 +122,6 @@ export class ScheduleComponent implements OnInit {
     return endTotalMinutes - startTotalMinutes;
   }
 
-  formatDate(date: Date): string {
-    const year: number = date.getUTCFullYear();
-    const month: string = String(date.getUTCMonth() + 1).padStart(2, '0');
-    const day: string = String(date.getUTCDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
   backwardArrowClick(): void {
     this.startDate.setDate(this.startDate.getDate() - this.daysToJumpOnArrowClick);
     this.resetAndGenerateDays();
@@ -147,17 +135,5 @@ export class ScheduleComponent implements OnInit {
   resetAndGenerateDays(): void {
     this.days = [];
     this.generateDays();
-  }
-
-  getClosestMonday(): Date {
-    let currentDate = new Date();
-    currentDate.setUTCHours(12, 0, 0, 0);
-
-    let dayOfWeek = currentDate.getUTCDay();
-    let difference = (dayOfWeek == 0) ? 1 : 8 - dayOfWeek;
-
-    currentDate.setUTCDate(currentDate.getUTCDate() + difference);
-
-    return currentDate;
   }
 }
