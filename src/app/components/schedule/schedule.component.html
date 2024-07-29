@@ -13,7 +13,11 @@
       <div class="slot-time">{{ slot.display }}</div>
       <div class="meetings-container">
         <div class="meetings">
-          <div class="meeting" *ngFor="let meeting of getMeetingsForTime(day, i)">
+          <div 
+            class="meeting" 
+            *ngFor="let meeting of getMeetingsForTime(day, i)"
+            [ngStyle]="{'background-color': getShade(personColors[meeting.person], i)}"
+            >
             {{ meeting.person }}: {{ meeting.title }}
           </div>
         </div>

@@ -23,9 +23,37 @@ export class ScheduleComponent implements OnInit {
   daysToJumpOnArrowClick: number = 7;
   startDate = this.getClosestMonday();
 
+  personColors: { [key: string]: string } = {};
+
   ngOnInit() {
+    this.assignColors();
     this.generateDays();
     this.generateTimeSlots();
+  }
+
+  assignColors() {
+    const uniquePersons = [...new Set(this.meetings.map(meeting => meeting.person))];
+    uniquePersons.forEach(person => {
+      this.personColors[person] = this.getRandomColor();
+    });
+  }
+
+  getShade(color: string, index: number): string {
+    const shadeFactor = 0.05 // Factor to control shade intensity
+    return this.mixWithWhite(color, shadeFactor * index);
+  }
+
+  mixWithWhite(color: string, factor: number): string {
+    const num = parseInt(color.slice(1), 16);
+    const R = (num >> 16) * (1 - factor) + 255 * factor;
+    const G = (num >> 8 & 0x00FF) * (1 - factor) + 255 * factor;
+    const B = (num & 0x0000FF) * (1 - factor) + 255 * factor;
+    return `#${(
+      0x1000000 +
+      Math.round(R) * 0x10000 +
+      Math.round(G) * 0x100 +
+      Math.round(B)
+    ).toString(16).slice(1)}`;
   }
 
   generateDays() {
@@ -121,13 +149,20 @@ export class ScheduleComponent implements OnInit {
   getClosestMonday(): Date {
     let currentDate = new Date();
     currentDate.setUTCHours(12, 0, 0, 0);
-  
-    let dayOfWeek = currentDate.getUTCDay();  
+
+    let dayOfWeek = currentDate.getUTCDay();
     let difference = (dayOfWeek == 0) ? 1 : 8 - dayOfWeek;
-  
+
     currentDate.setUTCDate(currentDate.getUTCDate() + difference);
-  
+
     return currentDate;
   }
-  
+
+  getRandomColor(): string {
+    const h = Math.floor(Math.random() * 360); // Hue: 0 to 360
+    const s = Math.floor(Math.random() * 50) + 50; // Saturation: 50% to 100%
+    const l = Math.floor(Math.random() * 20) + 50; // Lightness: 50% to 70%
+    
+    return `hsl(${h}, ${s}%, ${l}%)`;
+  }
 }
