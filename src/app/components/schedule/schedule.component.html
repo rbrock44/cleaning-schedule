@@ -16,7 +16,7 @@
           <div 
             class="meeting" 
             *ngFor="let meeting of getMeetingsForTime(day, i)"
-            [ngStyle]="{'background-color': getShade(personColors[meeting.person], i)}"
+            [ngStyle]="{'background-color': getShadeForMeeting(meeting)}"
             >
             {{ meeting.person }}: {{ meeting.title }}
           </div>

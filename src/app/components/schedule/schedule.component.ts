@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Meeting } from '../../type/meeting.type';
+import { Person, Shades } from '../../type/person.type';
+import { getRandomColor, lightenColor } from '../../utility/color/color';
 
 @Component({
   standalone: true,
@@ -11,9 +14,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
+[x: string]: any;
   days: string[] = [];
   timeSlots: { value: string, display: string }[] = [];
-  meetings = [
+  meetings: Meeting[] = [
     { date: '2024-07-29', startTime: '07:30', endTime: '08:00', title: 'Meeting 1', person: 'Addie' },
     { date: '2024-07-29', startTime: '08:00', endTime: '09:00 ', title: 'Ashley', person: 'Addie' },
     { date: '2024-07-29', startTime: '13:00', endTime: '13:30 ', title: 'Dr Moon', person: 'Mitchelle' },
@@ -23,7 +27,7 @@ export class ScheduleComponent implements OnInit {
   daysToJumpOnArrowClick: number = 7;
   startDate = this.getClosestMonday();
 
-  personColors: { [key: string]: string } = {};
+  personColors: { [name: string]: Person } = {};
 
   ngOnInit() {
     this.assignColors();
@@ -34,26 +38,25 @@ export class ScheduleComponent implements OnInit {
   assignColors() {
     const uniquePersons = [...new Set(this.meetings.map(meeting => meeting.person))];
     uniquePersons.forEach(person => {
-      this.personColors[person] = this.getRandomColor();
+      const color = getRandomColor();
+
+      const shades: Shades = {}
+      const uniqueTitlesPerPerson = [...new Set(this.meetings.filter(meeting => meeting.person === person).map(meeting => meeting.title))];
+
+
+      uniqueTitlesPerPerson.forEach((title, index) => {
+        shades[title] = lightenColor(color, index);
+      });
+
+      this.personColors[person] = {
+        color: color,
+        shades: shades
+      };
     });
   }
 
-  getShade(color: string, index: number): string {
-    const shadeFactor = 0.05 // Factor to control shade intensity
-    return this.mixWithWhite(color, shadeFactor * index);
-  }
-
-  mixWithWhite(color: string, factor: number): string {
-    const num = parseInt(color.slice(1), 16);
-    const R = (num >> 16) * (1 - factor) + 255 * factor;
-    const G = (num >> 8 & 0x00FF) * (1 - factor) + 255 * factor;
-    const B = (num & 0x0000FF) * (1 - factor) + 255 * factor;
-    return `#${(
-      0x1000000 +
-      Math.round(R) * 0x10000 +
-      Math.round(G) * 0x100 +
-      Math.round(B)
-    ).toString(16).slice(1)}`;
+  getShadeForMeeting(meeting: Meeting) {
+    return this.personColors[meeting.person].shades[meeting.title];
   }
 
   generateDays() {
@@ -156,13 +159,5 @@ export class ScheduleComponent implements OnInit {
     currentDate.setUTCDate(currentDate.getUTCDate() + difference);
 
     return currentDate;
-  }
-
-  getRandomColor(): string {
-    const h = Math.floor(Math.random() * 360); // Hue: 0 to 360
-    const s = Math.floor(Math.random() * 50) + 50; // Saturation: 50% to 100%
-    const l = Math.floor(Math.random() * 20) + 50; // Lightness: 50% to 70%
-    
-    return `hsl(${h}, ${s}%, ${l}%)`;
   }
 }
