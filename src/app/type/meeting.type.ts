@@ -5,3 +5,8 @@ export type Meeting = {
     title: string, 
     person: string
 };
+
+export type TimeSlot = {
+  value: string, 
+  display: string 
+}

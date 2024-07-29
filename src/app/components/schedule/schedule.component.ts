@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Meeting } from '../../type/meeting.type';
+import { Meeting, TimeSlot } from '../../type/meeting.type';
 import { Person, Shades } from '../../type/person.type';
 import { getRandomColor, lightenColor } from '../../utility/color/color';
-import { formatDate, formatTime, getClosestMonday } from '../../utility/date/date';
+import { formatDate, formatTime, generateDays, generateTimeSlots, getClosestMonday } from '../../utility/date/date';
 
 @Component({
   standalone: true,
@@ -15,9 +15,8 @@ import { formatDate, formatTime, getClosestMonday } from '../../utility/date/dat
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
-[x: string]: any;
   days: string[] = [];
-  timeSlots: { value: string, display: string }[] = [];
+  timeSlots: TimeSlot[] = [];
   meetings: Meeting[] = [
     { date: '2024-07-29', startTime: '07:30', endTime: '08:00', title: 'Meeting 1', person: 'Addie' },
     { date: '2024-07-29', startTime: '08:00', endTime: '09:00 ', title: 'Ashley', person: 'Addie' },
@@ -32,8 +31,8 @@ export class ScheduleComponent implements OnInit {
 
   ngOnInit() {
     this.assignColors();
-    this.generateDays();
-    this.generateTimeSlots();
+    this.days = generateDays(this.startDate);
+    this.timeSlots = generateTimeSlots();
   }
 
   assignColors() {
@@ -58,32 +57,6 @@ export class ScheduleComponent implements OnInit {
 
   getShadeForMeeting(meeting: Meeting) {
     return this.personColors[meeting.person].shades[meeting.title];
-  }
-
-  generateDays() {
-    for (let i = 0; i < 5; i++) {
-      const currentDate: Date = new Date(this.startDate);
-      currentDate.setDate(this.startDate.getDate() + i);
-      currentDate.setHours(12);
-      this.days.push(formatDate(currentDate));
-    }
-  }
-
-  generateTimeSlots() {
-    const startHours: number = 7;
-    const endHours: number = 17;
-    const startTime: Date = new Date();
-    startTime.setHours(startHours, 0, 0);
-    const endTime: Date = new Date(startTime);
-    endTime.setHours(endHours, 0, 0);
-
-    while (startTime < endTime) {
-      this.timeSlots.push({
-        value: formatTime(startTime),
-        display: formatTime(startTime, false)
-      });
-      startTime.setMinutes(startTime.getMinutes() + 30);
-    }
   }
 
   getMeetingsForTime(day: string, slotIndex: number) {
@@ -133,7 +106,6 @@ export class ScheduleComponent implements OnInit {
   }
 
   resetAndGenerateDays(): void {
-    this.days = [];
-    this.generateDays();
+    this.days = generateDays(this.startDate);
   }
 }
