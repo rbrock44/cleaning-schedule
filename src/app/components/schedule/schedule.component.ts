@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Meeting, TimeSlot } from '../../type/meeting.type';
 import { People, Shades } from '../../type/person.type';
 import { getUniqueLightenedColor, getUniqueRandomColor } from '../../utility/color/color';
-import { generateDays, generateTimeSlots, getClosestMonday } from '../../utility/date/date';
+import { formatMonthAndYear, generateDays, generateTimeSlots, getClosestMonday } from '../../utility/date/date';
 
 @Component({
   standalone: true,
@@ -30,6 +30,28 @@ export class ScheduleComponent implements OnInit {
     this.timeSlots = generateTimeSlots();
   }
 
+  getMonthBannerClassname(index: number): string {
+    // TODO: properly define widths of each month-banner
+    const widthClass = '';
+    return `month-banner ${widthClass}`;
+  }
+  
+  getFirstMonth(): string {
+    return formatMonthAndYear(this.getMonth(this.days[0]));
+  }
+
+  getSecondMonth(): string {
+    return formatMonthAndYear(this.getMonth(this.days[this.days.length - 1]));
+  }
+
+  hasSecondMonth(): boolean {
+    return this.getMonth(this.days[0]) !== this.getMonth(this.days[this.days.length - 1])
+  }
+
+  isUniqueMonth(day: string, index: number): boolean {
+    return index === 0 || (index > 0 && this.getMonth(day) !== this.getMonth(this.days[index - 1]))
+  }
+
   assignColors() {
     const uniquePersons = [...new Set(this.meetings.map(meeting => meeting.person))];
     uniquePersons.forEach(person => {
@@ -38,7 +60,7 @@ export class ScheduleComponent implements OnInit {
       const shades: Shades = {}
       const uniqueTitlesPerPerson = [...new Set(this.meetings.filter(meeting => meeting.person === person).map(meeting => meeting.title))];
 
-      uniqueTitlesPerPerson.forEach( title => {
+      uniqueTitlesPerPerson.forEach(title => {
         shades[title] = getUniqueLightenedColor(shades, color);
       });
 
@@ -104,7 +126,11 @@ export class ScheduleComponent implements OnInit {
   }
 
   getMonth(date: string): string {
-    return date.substring(0, 6); // Extracts the 'yyyyMM' part
+    if (date.length > 6) {
+      return date.substring(0, 7); // Extracts the 'yyyy-MM' part
+    } else {
+      return ''
+    }
   }
 
   getMeetings() {

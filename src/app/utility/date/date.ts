@@ -66,3 +66,12 @@ export function getWeekday(index: number): string {
     }
     return weekdays[index];
 }
+
+export function formatMonthAndYear(dateString: string): string {
+    const [year, month] = dateString.split('-');
+    const date = new Date(+year, +month - 1);
+
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    return `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+}
