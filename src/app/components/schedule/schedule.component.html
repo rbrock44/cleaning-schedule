@@ -6,22 +6,31 @@
     <span>&rarr;</span>
   </button>
 </div>
-<div class="schedule-container">
-  <div class="day-column" *ngFor="let day of days">
-    <div class="day-header">{{ day | date: 'yyyyMMdd' }}</div>
-    <div class="time-slot" *ngFor="let slot of timeSlots; let i = index">
-      <div class="slot-time">{{ slot.display }}</div>
-      <div class="meetings-container">
-        <div class="meetings">
-          <div 
-            class="meeting" 
-            *ngFor="let meeting of getMeetingsForTime(day, i)"
-            [ngStyle]="{'background-color': getShadeForMeeting(meeting)}"
-            >
-            {{ meeting.person }}: {{ meeting.title }}
+<div >
+  <div class="month-container" *ngFor="let day of days; let i = index">
+    <div *ngIf="i === 0 || (i > 0 && getMonth(day) !== getMonth(days[i - 1]))">
+      <div class="month-banner">{{ day | date: 'MMMM yyyy' }}</div>
+
+    </div>
+  </div>
+  <div class="schedule-container">
+    <div class="day-column" *ngFor="let day of days; let i = index">
+      <div class="day-header">{{ day | date: 'yyyyMMdd' }}</div>
+      <div class="time-slot" *ngFor="let slot of timeSlots; let i = index">
+        <div class="slot-time">{{ slot.display }}</div>
+        <div class="meetings-container">
+          <div class="meetings">
+            <div class="meeting" *ngFor="let meeting of getMeetingsForTime(day, i)"
+              [ngStyle]="{'background-color': getShadeForMeeting(meeting)}">
+              {{ meeting.person }}: {{ meeting.title }}
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <!-- <div *ngIf="i === 0 || (i > 0 && getMonth(day) !== getMonth(days[i - 1]))">
+      <div class="month-banner">{{ day | date: 'MMMM yyyy' }}</div>
+    </div> -->
+  
 </div>

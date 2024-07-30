@@ -42,10 +42,11 @@ export function generateTimeSlots(): TimeSlot[] {
 
     const startHours: number = 7;
     const endHours: number = 17;
+
     const startTime: Date = new Date();
-    startTime.setHours(startHours, 0, 0);
+    startTime.setHours(startHours, 30, 0);
     const endTime: Date = new Date(startTime);
-    endTime.setHours(endHours, 0, 0);
+    endTime.setHours(endHours, 30, 0);
 
     while (startTime < endTime) {
         timeSlots.push({
@@ -56,4 +57,12 @@ export function generateTimeSlots(): TimeSlot[] {
     }
 
     return timeSlots
+}
+
+export function getWeekday(index: number): string {
+    const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    if (index < 0 || index >= weekdays.length) {
+        return 'Invalid index';
+    }
+    return weekdays[index];
 }

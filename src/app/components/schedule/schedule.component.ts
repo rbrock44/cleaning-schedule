@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Meeting, TimeSlot } from '../../type/meeting.type';
-import { Person, Shades } from '../../type/person.type';
-import { getUniqueRandomColor, getRandomColor, lightenColor } from '../../utility/color/color';
-import { formatDate, formatTime, generateDays, generateTimeSlots, getClosestMonday } from '../../utility/date/date';
+import { People, Shades } from '../../type/person.type';
+import { getUniqueLightenedColor, getUniqueRandomColor } from '../../utility/color/color';
+import { generateDays, generateTimeSlots, getClosestMonday } from '../../utility/date/date';
 
 @Component({
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
   ],
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
@@ -17,19 +17,14 @@ import { formatDate, formatTime, generateDays, generateTimeSlots, getClosestMond
 export class ScheduleComponent implements OnInit {
   days: string[] = [];
   timeSlots: TimeSlot[] = [];
-  meetings: Meeting[] = [
-    { date: '2024-07-29', startTime: '07:30', endTime: '08:00', title: 'Meeting 1', person: 'Addie' },
-    { date: '2024-07-29', startTime: '08:00', endTime: '09:00 ', title: 'Ashley', person: 'Addie' },
-    { date: '2024-07-29', startTime: '13:00', endTime: '13:30 ', title: 'Dr Moon', person: 'Mitchelle' },
-    { date: '2024-07-29', startTime: '12:00', endTime: '14:00 ', title: 'Anne', person: 'Addie' },
-    // Add more meetings as needed
-  ];
+  meetings: Meeting[] = [];
   daysToJumpOnArrowClick: number = 7;
   startDate = getClosestMonday();
 
-  people: { [name: string]: Person } = {};
+  people: People = {};
 
   ngOnInit() {
+    this.getMeetings();
     this.assignColors();
     this.days = generateDays(this.startDate);
     this.timeSlots = generateTimeSlots();
@@ -44,7 +39,7 @@ export class ScheduleComponent implements OnInit {
       const uniqueTitlesPerPerson = [...new Set(this.meetings.filter(meeting => meeting.person === person).map(meeting => meeting.title))];
 
       uniqueTitlesPerPerson.forEach( title => {
-        shades[title] = lightenColor(color);
+        shades[title] = getUniqueLightenedColor(shades, color);
       });
 
       this.people[person] = {
@@ -106,5 +101,20 @@ export class ScheduleComponent implements OnInit {
 
   resetAndGenerateDays(): void {
     this.days = generateDays(this.startDate);
+  }
+
+  getMonth(date: string): string {
+    return date.substring(0, 6); // Extracts the 'yyyyMM' part
+  }
+
+  getMeetings() {
+    // TODO: wire up http call for meetings
+    this.meetings = [
+      { date: '2024-07-29', startTime: '07:30', endTime: '08:00', title: 'Meeting 1', person: 'Addie' },
+      { date: '2024-07-29', startTime: '08:00', endTime: '09:00 ', title: 'Ashley', person: 'Addie' },
+      { date: '2024-07-29', startTime: '13:00', endTime: '13:30 ', title: 'Dr Moon', person: 'Mitchelle' },
+      { date: '2024-07-29', startTime: '12:00', endTime: '14:00 ', title: 'Anne', person: 'Addie' },
+      // Add more meetings as needed
+    ];
   }
 }
