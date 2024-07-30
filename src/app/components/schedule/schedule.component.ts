@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Meeting, TimeSlot } from '../../type/meeting.type';
 import { Person, Shades } from '../../type/person.type';
-import { getRandomColor, lightenColor } from '../../utility/color/color';
+import { getUniqueRandomColor, getRandomColor, lightenColor } from '../../utility/color/color';
 import { formatDate, formatTime, generateDays, generateTimeSlots, getClosestMonday } from '../../utility/date/date';
 
 @Component({
@@ -27,7 +27,7 @@ export class ScheduleComponent implements OnInit {
   daysToJumpOnArrowClick: number = 7;
   startDate = getClosestMonday();
 
-  personColors: { [name: string]: Person } = {};
+  people: { [name: string]: Person } = {};
 
   ngOnInit() {
     this.assignColors();
@@ -38,17 +38,16 @@ export class ScheduleComponent implements OnInit {
   assignColors() {
     const uniquePersons = [...new Set(this.meetings.map(meeting => meeting.person))];
     uniquePersons.forEach(person => {
-      const color = getRandomColor();
+      const color: string = getUniqueRandomColor(this.people);
 
       const shades: Shades = {}
       const uniqueTitlesPerPerson = [...new Set(this.meetings.filter(meeting => meeting.person === person).map(meeting => meeting.title))];
 
-
-      uniqueTitlesPerPerson.forEach((title, index) => {
-        shades[title] = lightenColor(color, index);
+      uniqueTitlesPerPerson.forEach( title => {
+        shades[title] = lightenColor(color);
       });
 
-      this.personColors[person] = {
+      this.people[person] = {
         color: color,
         shades: shades
       };
@@ -56,7 +55,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   getShadeForMeeting(meeting: Meeting) {
-    return this.personColors[meeting.person].shades[meeting.title];
+    return this.people[meeting.person].shades[meeting.title];
   }
 
   getMeetingsForTime(day: string, slotIndex: number) {
