@@ -55,6 +55,7 @@
   padding: 2px;
   box-sizing: border-box;
   text-overflow: ellipsis;
+  cursor: pointer;
 }
 
 .arrow-container {
@@ -128,4 +129,10 @@ span {
 
 .four {
   width: 400%;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Space between buttons */
 }

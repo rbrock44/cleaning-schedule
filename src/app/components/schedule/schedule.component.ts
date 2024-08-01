@@ -194,6 +194,10 @@ export class ScheduleComponent implements OnInit {
   }
 
   meetingClick(meeting: Meeting): void {
-    
+    // TODO: load edit meeting popup
+  }
+
+  addMeeting(): void {
+    // TODO: load add meeting popup (or edit meeting with no meeting)
   }
 }
