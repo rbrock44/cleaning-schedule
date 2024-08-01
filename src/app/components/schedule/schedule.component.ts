@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Meeting, TimeSlot } from '../../type/meeting.type';
 import { People, Shades } from '../../type/person.type';
 import { getUniqueLightenedColor, getUniqueRandomColor } from '../../utility/color/color';
-import { formatMonthAndYear, generateDays, generateTimeSlots, getClosestMonday } from '../../utility/date/date';
+import { formatMonthAndYear, generateDays, generateTimeSlots, getClosestMonday, getDayWithSuffix } from '../../utility/date/date';
 
 @Component({
   standalone: true,
@@ -30,12 +30,29 @@ export class ScheduleComponent implements OnInit {
     this.timeSlots = generateTimeSlots();
   }
 
+  parseDayWithSuffix(date: string): string {
+    return getDayWithSuffix(+date.substring(8));
+  }
+
   getMonthBannerClassname(index: number): string {
-    // TODO: properly define widths of each month-banner
-    const widthClass = '';
+    let widthClass = '';
+    if (this.hasSecondMonth()) {
+      if (index === 0) {
+        console.log('HAS SECOND MONTH CORRECT INDEX: ', this.secondMonthIndex())
+        const index = this.secondMonthIndex();
+        switch (index) {
+          case 1: widthClass = 'one'; break;
+          case 2: widthClass = 'two'; break;
+          case 3: widthClass = 'three'; break;
+          case 4: widthClass = 'four'; break;
+          default: widthClass = '';
+        }
+        console.log('WIDTH: ', widthClass)
+      }
+    }
     return `month-banner ${widthClass}`;
   }
-  
+
   getFirstMonth(): string {
     return formatMonthAndYear(this.getMonth(this.days[0]));
   }
@@ -46,6 +63,19 @@ export class ScheduleComponent implements OnInit {
 
   hasSecondMonth(): boolean {
     return this.getMonth(this.days[0]) !== this.getMonth(this.days[this.days.length - 1])
+  }
+
+  secondMonthIndex(): number {
+    let index = 1;
+    this.days.forEach((day, i) => {
+      if (i != 0) {
+        if (this.getMonth(this.days[i]) !== this.getMonth(this.days[i - 1])) {
+          index = i;
+          return;
+        }
+      }
+    });
+    return index;
   }
 
   isUniqueMonth(day: string, index: number): boolean {

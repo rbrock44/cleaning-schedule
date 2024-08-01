@@ -75,3 +75,18 @@ export function formatMonthAndYear(dateString: string): string {
 
     return `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
 }
+
+export function getDayWithSuffix(day: number): string {
+    if (typeof day !== 'number' || day < 1 || day > 31) {
+        throw new Error('Invalid day');
+    }
+    
+    const suffixes = ["th", "st", "nd", "rd"];
+    const value = day % 100;
+    
+    return day + (suffixes[(value - 20) % 10] || suffixes[value] || suffixes[0]);
+}
+
+export function parseDayWithSuffix(date: string): string {
+    return getDayWithSuffix(+date.substring(8));
+}

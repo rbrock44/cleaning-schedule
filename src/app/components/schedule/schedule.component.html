@@ -9,13 +9,13 @@
 <div>
   <div class="month-container">
     <div class={{getMonthBannerClassname(0)}}>{{getFirstMonth()}}</div>
-    <div class={{getMonthBannerClassname(1)}} *ngIf="hasSecondMonth()" class="month-banner2">{{getSecondMonth()}}</div>
+    <div class={{getMonthBannerClassname(1)}} *ngIf="hasSecondMonth()">{{getSecondMonth()}}</div>
   </div>
 </div>
 
 <div class="schedule-container">
   <div class="day-column" *ngFor="let day of days; let i = index">
-    <div class="day-header">{{ day | date: 'yyyyMMdd' }}</div>
+    <div class="day-header">{{this.parseDayWithSuffix(day)}}</div>
     <div class="time-slot" *ngFor="let slot of timeSlots; let i = index">
       <div class="slot-time">{{ slot.display }}</div>
       <div class="meetings-container">
