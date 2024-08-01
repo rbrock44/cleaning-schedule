@@ -25,9 +25,13 @@
 }
 
 .time-slot {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px dashed #ddd;
   height: 30px;
   position: relative;
+}
+
+.time-slot:last-child {
+  border-bottom: none;
 }
 
 .slot-time {
@@ -58,6 +62,11 @@
   justify-content: space-between;
   align-items: center;
   margin: 20px;
+}
+
+.title-container {
+  display: flex;
+  justify-content: center;
 }
 
 .arrow-btn {

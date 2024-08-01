@@ -4,20 +4,26 @@ import { Meeting, TimeSlot } from '../../type/meeting.type';
 import { People, Shades } from '../../type/person.type';
 import { getUniqueLightenedColor, getUniqueRandomColor } from '../../utility/color/color';
 import { formatMonthAndYear, generateDays, generateTimeSlots, getClosestMonday, getDayWithSuffix } from '../../utility/date/date';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule
   ],
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
+  defaultDropdownOption: string = 'All';
+  dropdownOptions: string[] = [this.defaultDropdownOption];
+  selectedValue: string = this.dropdownOptions[0];
   days: string[] = [];
   timeSlots: TimeSlot[] = [];
-  meetings: Meeting[] = [];
+  allMeetings: Meeting[] = [];
+  filteredMeetings: Meeting[] = [];
   daysToJumpOnArrowClick: number = 7;
   startDate = getClosestMonday();
 
@@ -38,7 +44,6 @@ export class ScheduleComponent implements OnInit {
     let widthClass = '';
     if (this.hasSecondMonth()) {
       if (index === 0) {
-        console.log('HAS SECOND MONTH CORRECT INDEX: ', this.secondMonthIndex())
         const index = this.secondMonthIndex();
         switch (index) {
           case 1: widthClass = 'one'; break;
@@ -47,7 +52,6 @@ export class ScheduleComponent implements OnInit {
           case 4: widthClass = 'four'; break;
           default: widthClass = '';
         }
-        console.log('WIDTH: ', widthClass)
       }
     }
     return `month-banner ${widthClass}`;
@@ -83,12 +87,12 @@ export class ScheduleComponent implements OnInit {
   }
 
   assignColors() {
-    const uniquePersons = [...new Set(this.meetings.map(meeting => meeting.person))];
+    const uniquePersons = [...new Set(this.filteredMeetings.map(meeting => meeting.person))];
     uniquePersons.forEach(person => {
       const color: string = getUniqueRandomColor(this.people);
 
       const shades: Shades = {}
-      const uniqueTitlesPerPerson = [...new Set(this.meetings.filter(meeting => meeting.person === person).map(meeting => meeting.title))];
+      const uniqueTitlesPerPerson = [...new Set(this.filteredMeetings.filter(meeting => meeting.person === person).map(meeting => meeting.title))];
 
       uniqueTitlesPerPerson.forEach(title => {
         shades[title] = getUniqueLightenedColor(shades, color);
@@ -111,7 +115,7 @@ export class ScheduleComponent implements OnInit {
     const slotDate = new Date(day);
     slotDate.setHours(parseInt(slotHour), parseInt(slotMinute));
 
-    const meetings = this.meetings.filter(meeting => {
+    const meetings = this.filteredMeetings.filter(meeting => {
       if (meeting.date !== day) return false;
 
       const [startHour, startMinute] = meeting.startTime.split(/[: ]/);
@@ -165,12 +169,27 @@ export class ScheduleComponent implements OnInit {
 
   getMeetings() {
     // TODO: wire up http call for meetings
-    this.meetings = [
+    this.allMeetings = [
       { date: '2024-07-29', startTime: '07:30', endTime: '08:00', title: 'Meeting 1', person: 'Addie' },
       { date: '2024-07-29', startTime: '08:00', endTime: '09:00 ', title: 'Ashley', person: 'Addie' },
       { date: '2024-07-29', startTime: '13:00', endTime: '13:30 ', title: 'Dr Moon', person: 'Mitchelle' },
       { date: '2024-07-29', startTime: '12:00', endTime: '14:00 ', title: 'Anne', person: 'Addie' },
       // Add more meetings as needed
     ];
+
+    this.filterMeetings();
+  }
+
+  filterMeetings(): void {
+    const sortedPeople = Array.from(new Set(this.allMeetings.map(x => x.person))).sort();
+    this.dropdownOptions = [this.defaultDropdownOption, ...sortedPeople]
+
+    this.filteredMeetings = this.allMeetings.filter(x => {
+      if (this.selectedValue == this.defaultDropdownOption) {
+        return true
+      } else {
+        return x.person == this.selectedValue
+      }
+    });
   }
 }

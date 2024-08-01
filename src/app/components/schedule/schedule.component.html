@@ -1,3 +1,9 @@
+<div class="title-container">
+  <select [(ngModel)]="selectedValue" (change)="filterMeetings()">
+    <option *ngFor="let option of dropdownOptions" [value]="option">{{option}}</option>
+  </select>
+</div>
+
 <div class="arrow-container">
   <button class="arrow-btn left-arrow" (click)="backwardArrowClick()">
     <span>&larr;</span>
