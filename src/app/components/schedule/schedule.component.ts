@@ -192,4 +192,8 @@ export class ScheduleComponent implements OnInit {
       }
     });
   }
+
+  meetingClick(meeting: Meeting): void {
+    
+  }
 }

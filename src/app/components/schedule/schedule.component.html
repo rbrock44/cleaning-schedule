@@ -1,13 +1,10 @@
-<div class="title-container">
-  <select [(ngModel)]="selectedValue" (change)="filterMeetings()">
-    <option *ngFor="let option of dropdownOptions" [value]="option">{{option}}</option>
-  </select>
-</div>
-
 <div class="arrow-container">
   <button class="arrow-btn left-arrow" (click)="backwardArrowClick()">
     <span>&larr;</span>
   </button>
+  <select [(ngModel)]="selectedValue" (change)="filterMeetings()">
+    <option *ngFor="let option of dropdownOptions" [value]="option">{{option}}</option>
+  </select>
   <button class="arrow-btn right-arrow" (click)="forwardArrowClick()">
     <span>&rarr;</span>
   </button>
@@ -20,13 +17,13 @@
 </div>
 
 <div class="schedule-container">
-  <div class="day-column" *ngFor="let day of days; let i = index">
+  <div class="day-column" *ngFor="let day of days">
     <div class="day-header">{{this.parseDayWithSuffix(day)}}</div>
     <div class="time-slot" *ngFor="let slot of timeSlots; let i = index">
       <div class="slot-time">{{ slot.display }}</div>
       <div class="meetings-container">
         <div class="meetings">
-          <div class="meeting" *ngFor="let meeting of getMeetingsForTime(day, i)"
+          <div class="meeting" *ngFor="let meeting of getMeetingsForTime(day, i)" (click)="meetingClick(meeting)"
             [ngStyle]="{'background-color': getShadeForMeeting(meeting)}">
             {{ meeting.person }}: {{ meeting.title }}
           </div>

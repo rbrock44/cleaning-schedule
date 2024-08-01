@@ -12,11 +12,14 @@ export function getClosestMonday(): Date {
     currentDate.setUTCHours(12, 0, 0, 0);
 
     let dayOfWeek = currentDate.getUTCDay();
-    let difference = (dayOfWeek == 0) ? 1 : 8 - dayOfWeek;
 
-    currentDate.setUTCDate(currentDate.getUTCDate() + difference);
-
-    return currentDate;
+    if (dayOfWeek === 1) {
+        return currentDate;
+    } else {
+        let difference = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+        currentDate.setUTCDate(currentDate.getUTCDate() + difference);
+        return currentDate;
+    }
 }
 
 export function formatTime(date: Date, is24Hour: boolean = true): string {
