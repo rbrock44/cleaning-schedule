@@ -1,8 +1,3 @@
-<div class="button-container">
-  <button (click)="addMeeting()">Add Meeting</button>
-  <button (click)="getMeetings()">Refresh</button>
-</div>
-
 <div class="arrow-container">
   <button class="arrow-btn left-arrow" (click)="backwardArrowClick()">
     <span>&larr;</span>
@@ -23,7 +18,15 @@
 
 <div class="schedule-container">
   <div class="day-column" *ngFor="let day of days">
-    <div class="day-header">{{this.parseDayWithSuffix(day)}}</div>
+    <div class="day-header">
+      <button class="plus-button" (click)="addMeeting(day)">
+        <span>+</span>
+      </button>
+      {{this.parseDayWithSuffix(day)}}
+      <button class="refresh-button" (click)="getMeetings()">
+        <span>&#x21bb;</span>
+    </button>
+    </div>
     <div class="time-slot" *ngFor="let slot of timeSlots; let i = index">
       <div class="slot-time">{{ slot.display }}</div>
       <div class="meetings-container">

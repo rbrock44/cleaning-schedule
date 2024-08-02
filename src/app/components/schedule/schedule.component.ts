@@ -197,7 +197,7 @@ export class ScheduleComponent implements OnInit {
     // TODO: load edit meeting popup
   }
 
-  addMeeting(): void {
+  addMeeting(defaultDay: string): void {
     // TODO: load add meeting popup (or edit meeting with no meeting)
   }
 }
