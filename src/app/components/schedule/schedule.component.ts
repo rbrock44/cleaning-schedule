@@ -1,22 +1,29 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Meeting, TimeSlot } from '../../type/meeting.type';
 import { People, Shades } from '../../type/person.type';
 import { getUniqueLightenedColor, getUniqueRandomColor } from '../../utility/color/color';
 import { formatMonthAndYear, generateDays, generateTimeSlots, getClosestMonday, getDayWithSuffix } from '../../utility/date/date';
 import { FormsModule } from '@angular/forms';
+import { MeetingEditComponent } from "../../meeting-edit/meeting-edit.component";
+import { MeetingAddComponent } from '../../meeting-add/meeting-add.component';
 
 @Component({
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
-  ],
+    FormsModule,
+    MeetingAddComponent,
+    MeetingEditComponent,
+],
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
+  @ViewChild('meetingAdd') meetingAdd!: MeetingAddComponent;
+  @ViewChild('meetingEdit') meetingEdit!: MeetingEditComponent;
+
   defaultDropdownOption: string = 'All';
   dropdownOptions: string[] = [this.defaultDropdownOption];
   selectedValue: string = this.dropdownOptions[0];
@@ -194,10 +201,10 @@ export class ScheduleComponent implements OnInit {
   }
 
   meetingClick(meeting: Meeting): void {
-    // TODO: load edit meeting popup
+    this.meetingEdit.openPopup(meeting);
   }
 
   addMeeting(defaultDay: string): void {
-    // TODO: load add meeting popup (or edit meeting with no meeting)
+    this.meetingAdd.openPopup(defaultDay);
   }
 }
