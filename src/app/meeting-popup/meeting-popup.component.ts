@@ -16,12 +16,7 @@ import { FormsModule } from '@angular/forms';
 export class MeetingPopupComponent {
   @Output() addMeeting = new EventEmitter<Meeting>()
   @Output() editMeeting = new EventEmitter<Meeting>()
-
-  showPopup: boolean = false;
-  isEdit: boolean = true;
-  personOptions: string[] = [];
-  filteredPeople: string[] = [];
-  meeting: Meeting = {
+  blankMeeting: Meeting = {
     date: '',
     startTime: '',
     endTime: '',
@@ -29,16 +24,25 @@ export class MeetingPopupComponent {
     person: ''
   };
 
+  showPopup: boolean = false;
+  isEdit: boolean = true;
+  personOptions: string[] = [];
+  filteredPeople: string[] = [];
+  meeting: Meeting = structuredClone(this.blankMeeting);
+
   openPopupCreate(defaultDay: string, personOptions: string[]) {
     this.personOptions = personOptions
-    this.meeting.date = defaultDay;
+    this.meeting = {
+      ...structuredClone(this.blankMeeting),
+      date: defaultDay
+    };
     this.isEdit = false;
     this.showPopup = true;
   }
 
   openPopupEdit(meeting: Meeting, personOptions: string[]) {
     this.personOptions = personOptions
-    this.meeting = meeting;
+    this.meeting = structuredClone(meeting);
     this.isEdit = true;
     this.showPopup = true;
   }
