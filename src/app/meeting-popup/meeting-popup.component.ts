@@ -62,13 +62,7 @@ export class MeetingPopupComponent {
   }
 
   resetForm() {
-    this.meeting = {
-      date: '',
-      startTime: '',
-      endTime: '',
-      title: '',
-      person: ''
-    };
+    this.meeting = structuredClone(this.blankMeeting);
   }
 
   filterPeople() {
