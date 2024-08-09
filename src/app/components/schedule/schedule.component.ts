@@ -110,7 +110,6 @@ export class ScheduleComponent implements OnInit {
   }
 
   getShadeForMeeting(meeting: Meeting) {
-    console.log('PERSON: ', meeting.person, this.people)
     return this.people[meeting.person].shades[meeting.title];
   }
 
