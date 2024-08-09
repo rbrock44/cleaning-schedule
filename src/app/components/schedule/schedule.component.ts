@@ -25,8 +25,8 @@ export class ScheduleComponent implements OnInit {
   @ViewChild('meetingEdit') meetingEdit!: MeetingEditComponent;
 
   defaultDropdownOption: string = 'All';
-  dropdownOptions: string[] = [this.defaultDropdownOption];
-  selectedValue: string = this.dropdownOptions[0];
+  personDropdownOptions: string[] = [this.defaultDropdownOption];
+  selectedValue: string = this.personDropdownOptions[0];
   days: string[] = [];
   timeSlots: TimeSlot[] = [];
   allMeetings: Meeting[] = [];
@@ -175,21 +175,54 @@ export class ScheduleComponent implements OnInit {
   }
 
   getMeetings() {
-    // TODO: wire up http call for meetings
-    this.allMeetings = [
+    const fakeMeetings = [
       { date: '2024-07-29', startTime: '07:30', endTime: '08:00', title: 'Meeting 1', person: 'Addie' },
       { date: '2024-07-29', startTime: '08:00', endTime: '09:00 ', title: 'Ashley', person: 'Addie' },
       { date: '2024-07-29', startTime: '13:00', endTime: '13:30 ', title: 'Dr Moon', person: 'Mitchelle' },
       { date: '2024-07-29', startTime: '12:00', endTime: '14:00 ', title: 'Anne', person: 'Addie' },
-      // Add more meetings as needed
+      { date: '2024-08-12', startTime: '08:00', endTime: '09:00', title: 'Team Sync', person: 'Addie' },
+      { date: '2024-08-12', startTime: '10:15', endTime: '11:00', title: 'Client Call', person: 'Addie' },
+      { date: '2024-08-12', startTime: '14:00', endTime: '15:00', title: 'Strategy Meeting', person: 'Samantha' },
+      { date: '2024-08-13', startTime: '08:30', endTime: '09:00', title: '1:1 with Addie', person: 'Mitchelle' },
+      { date: '2024-08-13', startTime: '13:00', endTime: '14:00', title: 'Development Update', person: 'Samantha' },
+      { date: '2024-08-13', startTime: '15:00', endTime: '15:30', title: 'Quick Sync', person: 'Mitchelle' },
+      { date: '2024-08-14', startTime: '09:00', endTime: '10:00', title: 'Team Standup', person: 'Addie' },
+      { date: '2024-08-14', startTime: '10:30', endTime: '11:30', title: 'Client Presentation', person: 'Samantha' },
+      { date: '2024-08-14', startTime: '13:00', endTime: '14:00', title: 'Feedback Session', person: 'Mitchelle' },
+      { date: '2024-08-14', startTime: '15:00', endTime: '16:00', title: 'All Hands Meeting', person: 'Addie' },
+      { date: '2024-08-15', startTime: '08:00', endTime: '09:00', title: 'Planning Session', person: 'Samantha' },
+      { date: '2024-08-15', startTime: '10:00', endTime: '11:00', title: 'Design Review', person: 'Mitchelle' },
+      { date: '2024-08-15', startTime: '14:30', endTime: '15:30', title: 'Sales Call', person: 'Samantha' },
+      { date: '2024-08-16', startTime: '09:00', endTime: '10:00', title: 'Weekly Sync', person: 'Addie' },
+      { date: '2024-08-16', startTime: '11:00', endTime: '12:00', title: 'Marketing Review', person: 'Mitchelle' },
+      { date: '2024-08-16', startTime: '13:00', endTime: '14:00', title: 'Product Launch', person: 'Samantha' },
+      { date: '2024-08-16', startTime: '15:00', endTime: '16:00', title: 'Retrospective', person: 'Addie' },
+      { date: '2024-08-19', startTime: '08:00', endTime: '09:00', title: 'Monday Kickoff', person: 'Addie' },
+      { date: '2024-08-19', startTime: '11:00', endTime: '12:00', title: 'Client Check-in', person: 'Samantha' },
+      { date: '2024-08-19', startTime: '14:00', endTime: '15:00', title: 'Tech Sync', person: 'Addie' },
+      { date: '2024-08-20', startTime: '08:30', endTime: '09:30', title: 'Design Discussion', person: 'Mitchelle' },
+      { date: '2024-08-20', startTime: '10:00', endTime: '11:00', title: 'Product Review', person: 'Addie' },
+      { date: '2024-08-20', startTime: '12:00', endTime: '13:00', title: 'HR Meeting', person: 'Samantha' },
+      { date: '2024-08-20', startTime: '14:30', endTime: '15:30', title: 'Code Review', person: 'Mitchelle' },
+      { date: '2024-08-21', startTime: '09:00', endTime: '10:00', title: 'Team Standup', person: 'Addie' },
+      { date: '2024-08-21', startTime: '10:30', endTime: '11:30', title: 'Client Call', person: 'Samantha' },
+      { date: '2024-08-22', startTime: '13:00', endTime: '14:00', title: 'Project Update', person: 'Mitchelle' },
+      { date: '2024-08-23', startTime: '12:00', endTime: '13:00', title: 'Lunch Meeting', person: 'Addie' },
+      { date: '2024-08-26', startTime: '09:30', endTime: '10:00', title: 'Project Update', person: 'Mitchelle' },
+      { date: '2024-08-27', startTime: '11:00', endTime: '12:00', title: 'Product Review', person: 'Addie' },
+      { date: '2024-08-28', startTime: '09:30', endTime: '10:30', title: 'Sprint Planning', person: 'Mitchelle' },
+    ];
+
+    // TODO: wire up http call for meetings
+    this.allMeetings = [
+      ...fakeMeetings
     ];
 
     this.filterMeetings();
   }
 
   filterMeetings(): void {
-    const sortedPeople = Array.from(new Set(this.allMeetings.map(x => x.person))).sort();
-    this.dropdownOptions = [this.defaultDropdownOption, ...sortedPeople]
+    this.personDropdownOptions = [this.defaultDropdownOption, ...this.getDistinctSortedPeople()]
 
     this.filteredMeetings = this.allMeetings.filter(x => {
       if (this.selectedValue == this.defaultDropdownOption) {
@@ -205,6 +238,10 @@ export class ScheduleComponent implements OnInit {
   }
 
   addMeeting(defaultDay: string): void {
-    this.meetingAdd.openPopup(defaultDay);
+    this.meetingAdd.openPopup(defaultDay, this.getDistinctSortedPeople());
+  }
+
+  getDistinctSortedPeople(): string[] {
+    return Array.from(new Set(this.allMeetings.map(x => x.person))).sort();
   }
 }

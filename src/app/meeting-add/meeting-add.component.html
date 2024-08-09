@@ -6,7 +6,36 @@
                 <h2>Add to Schedule</h2>
             </div>
             <div class="popup-body">
-                <p>meeting-add works! {{defaultDay}}</p>
+                <form (ngSubmit)="onSubmit()" #meetingForm="ngForm">
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" [(ngModel)]="meeting.date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="startTime">Start Time</label>
+                        <input type="time" step="60" id="startTime" name="startTime" [(ngModel)]="meeting.startTime"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endTime">End Time</label>
+                        <input type="time" step="60" id="endTime" name="endTime" [(ngModel)]="meeting.endTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title" [(ngModel)]="meeting.title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="person">Person</label>
+                        <input type="text" id="person" name="person" [(ngModel)]="meeting.person"
+                            (input)="filterPeople()" required autocomplete="off">
+                        <ul *ngIf="filteredPeople.length > 0" class="autocomplete-list">
+                            <li *ngFor="let person of filteredPeople" (click)="selectPerson(person)">
+                                {{ person }}
+                            </li>
+                        </ul>
+                    </div>
+                    <button type="submit" [disabled]="!meetingForm.form.valid">Create Meeting</button>
+                </form>
             </div>
         </div>
     </div>

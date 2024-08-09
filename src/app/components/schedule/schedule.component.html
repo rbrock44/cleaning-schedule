@@ -3,7 +3,7 @@
     <span>&larr;</span>
   </button>
   <select [(ngModel)]="selectedValue" (change)="filterMeetings()">
-    <option *ngFor="let option of dropdownOptions" [value]="option">{{option}}</option>
+    <option *ngFor="let option of personDropdownOptions" [value]="option">{{option}}</option>
   </select>
   <button class="arrow-btn right-arrow" (click)="forwardArrowClick()">
     <span>&rarr;</span>
