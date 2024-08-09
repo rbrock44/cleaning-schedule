@@ -19,7 +19,7 @@
 <div class="schedule-container">
   <div class="day-column" *ngFor="let day of days">
     <div class="day-header">
-      <button class="plus-button" (click)="addMeeting(day)">
+      <button class="plus-button" (click)="addMeetingPopup(day)">
         <span>+</span>
       </button>
       {{this.parseDayWithSuffix(day)}}
@@ -31,7 +31,7 @@
       <div class="slot-time">{{ slot.display }}</div>
       <div class="meetings-container">
         <div class="meetings">
-          <div class="meeting" *ngFor="let meeting of getMeetingsForTime(day, i)" (click)="meetingClick(meeting)"
+          <div class="meeting" *ngFor="let meeting of getMeetingsForTime(day, i)" (click)="editMeetingPopup(meeting)"
             [ngStyle]="{'background-color': getShadeForMeeting(meeting)}">
             {{ meeting.person }}: {{ meeting.title }}
           </div>
@@ -41,5 +41,4 @@
   </div>
 </div>
 
-<app-meeting-edit #meetingEdit/>
-<app-meeting-add #meetingAdd/>
+<app-meeting-popup #meetingPopup (editMeeting)="editedMeeting($event)" (addMeeting)="addMeeting($event)"/>

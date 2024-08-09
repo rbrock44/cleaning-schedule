@@ -3,7 +3,8 @@
         <div class="popup-content" (click)="$event.stopPropagation()">
             <div class="popup-header">
                 <span class="popup-close" (click)="closePopup()">&times;</span>
-                <h2>Add to Schedule</h2>
+                <h2 *ngIf="!isEdit">Add to Schedule</h2>
+                <h2 *ngIf="isEdit">Edit Existing Schedule</h2>
             </div>
             <div class="popup-body">
                 <form (ngSubmit)="onSubmit()" #meetingForm="ngForm">
@@ -34,7 +35,8 @@
                             </li>
                         </ul>
                     </div>
-                    <button type="submit" [disabled]="!meetingForm.form.valid">Create Meeting</button>
+                    <button *ngIf="!isEdit" type="submit" [disabled]="!meetingForm.form.valid">Create</button>
+                    <button *ngIf="isEdit" type="submit" [disabled]="!meetingForm.form.valid">Edit</button>
                 </form>
             </div>
         </div>

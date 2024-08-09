@@ -1,28 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MeetingPopupComponent } from '../../meeting-popup/meeting-popup.component';
 import { Meeting, TimeSlot } from '../../type/meeting.type';
 import { People, Shades } from '../../type/person.type';
 import { getUniqueLightenedColor, getUniqueRandomColor } from '../../utility/color/color';
 import { formatMonthAndYear, generateDays, generateTimeSlots, getClosestMonday, getDayWithSuffix } from '../../utility/date/date';
-import { FormsModule } from '@angular/forms';
-import { MeetingEditComponent } from "../../meeting-edit/meeting-edit.component";
-import { MeetingAddComponent } from '../../meeting-add/meeting-add.component';
 
 @Component({
   standalone: true,
   imports: [
     CommonModule,
     FormsModule,
-    MeetingAddComponent,
-    MeetingEditComponent,
+    MeetingPopupComponent,
 ],
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
-  @ViewChild('meetingAdd') meetingAdd!: MeetingAddComponent;
-  @ViewChild('meetingEdit') meetingEdit!: MeetingEditComponent;
+  @ViewChild('meetingPopup') meetingPopup!: MeetingPopupComponent;
 
   defaultDropdownOption: string = 'All';
   personDropdownOptions: string[] = [this.defaultDropdownOption];
@@ -233,15 +230,23 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
-  meetingClick(meeting: Meeting): void {
-    this.meetingEdit.openPopup(meeting);
+  editMeetingPopup(meeting: Meeting): void {
+    this.meetingPopup.openPopupEdit(meeting, this.getDistinctSortedPeople());
   }
 
-  addMeeting(defaultDay: string): void {
-    this.meetingAdd.openPopup(defaultDay, this.getDistinctSortedPeople());
+  addMeetingPopup(defaultDay: string): void {
+    this.meetingPopup.openPopupCreate(defaultDay, this.getDistinctSortedPeople());
   }
 
   getDistinctSortedPeople(): string[] {
     return Array.from(new Set(this.allMeetings.map(x => x.person))).sort();
+  }
+
+  addMeeting(meeting: Meeting): void {
+
+  }
+
+  editedMeeting(meeting: Meeting): void {
+    
   }
 }

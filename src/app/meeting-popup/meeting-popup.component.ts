@@ -4,19 +4,21 @@ import { Meeting } from '../type/meeting.type';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-meeting-add',
+  selector: 'app-meeting-popup',
   standalone: true,
   imports: [
     CommonModule,
     FormsModule
   ],
-  templateUrl: './meeting-add.component.html',
-  styleUrl: './meeting-add.component.scss'
+  templateUrl: './meeting-popup.component.html',
+  styleUrl: './meeting-popup.component.scss'
 })
-export class MeetingAddComponent {
+export class MeetingPopupComponent {
   @Output() addMeeting = new EventEmitter<Meeting>()
+  @Output() editMeeting = new EventEmitter<Meeting>()
 
   showPopup: boolean = false;
+  isEdit: boolean = true;
   personOptions: string[] = [];
   filteredPeople: string[] = [];
   meeting: Meeting = {
@@ -27,9 +29,17 @@ export class MeetingAddComponent {
     person: ''
   };
 
-  openPopup(defaultDay: string, personOptions: string[]) {
+  openPopupCreate(defaultDay: string, personOptions: string[]) {
     this.personOptions = personOptions
     this.meeting.date = defaultDay;
+    this.isEdit = false;
+    this.showPopup = true;
+  }
+
+  openPopupEdit(meeting: Meeting, personOptions: string[]) {
+    this.personOptions = personOptions
+    this.meeting = meeting;
+    this.isEdit = true;
     this.showPopup = true;
   }
 
@@ -39,7 +49,11 @@ export class MeetingAddComponent {
   }
 
   onSubmit() {
-    this.addMeeting.emit(this.meeting);
+    if (this.isEdit) {
+      this.editMeeting.emit(this.meeting);
+    } else {
+      this.addMeeting.emit(this.meeting);
+    }
     this.closePopup();
   }
 
