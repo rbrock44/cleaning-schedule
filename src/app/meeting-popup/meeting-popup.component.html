@@ -27,9 +27,18 @@
                     </div>
                     <div class="form-group">
                         <label for="person">Person</label>
-                        <input type="text" id="person" name="person" [(ngModel)]="meeting.person"
-                            (input)="filterPeople()" required autocomplete="off">
-                        <ul *ngIf="filteredPeople.length > 0" class="autocomplete-list">
+                        <input 
+                            type="text" 
+                            id="person" 
+                            name="person" 
+                            (focus)="showDropdown()" 
+                            (blur)="hideDropdown()" 
+                            [(ngModel)]="meeting.person"
+                            (input)="filterPeople()" 
+                            required 
+                            autocomplete="off"
+                            >
+                        <ul *ngIf="filteredPeople.length > 0 && showAutocomplete" class="autocomplete-list">
                             <li *ngFor="let person of filteredPeople" (click)="selectPerson(person)">
                                 {{ person }}
                             </li>

@@ -29,6 +29,7 @@ export class MeetingPopupComponent {
   personOptions: string[] = [];
   filteredPeople: string[] = [];
   meeting: Meeting = structuredClone(this.blankMeeting);
+  showAutocomplete = false;
 
   openPopupCreate(defaultDay: string, personOptions: string[]) {
     this.personOptions = personOptions
@@ -73,5 +74,13 @@ export class MeetingPopupComponent {
   selectPerson(person: string) {
     this.meeting.person = person;
     this.filteredPeople = [];
+  }
+
+  showDropdown(): void {
+    this.showAutocomplete = true;
+  }
+
+  hideDropdown(): void {
+    this.showAutocomplete = false;
   }
 }
