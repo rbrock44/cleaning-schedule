@@ -174,9 +174,9 @@ export class ScheduleComponent implements OnInit {
   getMeetings() {
     const fakeMeetings = [
       { date: '2024-07-29', startTime: '07:30', endTime: '08:00', title: 'Meeting 1', person: 'Addie' },
-      { date: '2024-07-29', startTime: '08:00', endTime: '09:00 ', title: 'Ashley', person: 'Addie' },
-      { date: '2024-07-29', startTime: '13:00', endTime: '13:30 ', title: 'Dr Moon', person: 'Mitchelle' },
-      { date: '2024-07-29', startTime: '12:00', endTime: '14:00 ', title: 'Anne', person: 'Addie' },
+      { date: '2024-07-29', startTime: '08:00', endTime: '09:00', title: 'Ashley', person: 'Addie' },
+      { date: '2024-07-29', startTime: '13:00', endTime: '13:30', title: 'Dr Moon', person: 'Mitchelle' },
+      { date: '2024-07-29', startTime: '12:00', endTime: '14:00', title: 'Anne', person: 'Addie' },
       { date: '2024-08-12', startTime: '08:00', endTime: '09:00', title: 'Team Sync', person: 'Addie' },
       { date: '2024-08-12', startTime: '10:15', endTime: '11:00', title: 'Client Call', person: 'Addie' },
       { date: '2024-08-12', startTime: '14:00', endTime: '15:00', title: 'Strategy Meeting', person: 'Samantha' },
@@ -210,7 +210,7 @@ export class ScheduleComponent implements OnInit {
       { date: '2024-08-28', startTime: '09:30', endTime: '10:30', title: 'Sprint Planning', person: 'Mitchelle' },
     ];
 
-    // TODO: wire up http call for meetings
+    // TODO: wire up http call for meetings for this week
     this.allMeetings = [
       ...fakeMeetings
     ];
@@ -243,10 +243,10 @@ export class ScheduleComponent implements OnInit {
   }
 
   addMeeting(meeting: Meeting): void {
-
+    // TODO: wire up add meeting endpoint
   }
 
   editedMeeting(meeting: Meeting): void {
-    
+    // TODO: wire up edit meeting endpoint
   }
 }

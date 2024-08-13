@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Meeting } from '../type/meeting.type';
+import { Meeting } from '../../type/meeting.type';
 import { FormsModule } from '@angular/forms';
 
 @Component({

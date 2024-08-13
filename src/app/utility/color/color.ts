@@ -1,5 +1,6 @@
 import { People, Person, Shades } from "../../type/person.type";
 
+// TODO: shorten list to colors we actually want
 const lightColors = [
     '#FFB6C1', '#FFB347', '#FFD700', '#98FB98', '#AFEEEE', '#ADD8E6', '#E6E6FA', '#D8BFD8', '#FF69B4', '#FF7F50',
     '#FF6347', '#FF4500', '#FFA07A', '#FFDAB9', '#FFE4B5', '#FFFACD', '#FAFAD2', '#E0FFFF', '#F0FFF0', '#F5FFFA',
@@ -27,6 +28,8 @@ function getRandomColor(): string {
     return lightColors[randomIndex]
 }
 
+// TODO: make lightened color better
+// one possible solution would be foreach lightColor, have an array of possible shades or lightened colors so we just select from that list
 export function getUniqueLightenedColor(shades: Shades, color: string): string {
     const uniqueShades = [...new Set(Object.values(shades))];
 
