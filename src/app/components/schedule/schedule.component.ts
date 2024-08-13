@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MeetingPopupComponent } from '../../meeting-popup/meeting-popup.component';
+import { MeetingPopupComponent } from '../meeting-popup/meeting-popup.component';
 import { Meeting, TimeSlot } from '../../type/meeting.type';
 import { People, Shades } from '../../type/person.type';
 import { getUniqueLightenedColor, getUniqueRandomColor } from '../../utility/color/color';
