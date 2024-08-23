@@ -42,8 +42,13 @@
   width: 50px;
 }
 
-.meetings {
+.meeting {
   display: flex;
+  align-items: center;  /* Centers content vertically */
+  justify-content: center;  /* Centers content horizontally */
+  padding: 5px;  /* Optional: Add some padding for better spacing */
+  box-sizing: border-box;  /* Ensures padding doesn't affect the size */
+  text-align: center;  /* Ensures the text is centered if it wraps */
 }
 
 .meetings-container {

@@ -119,21 +119,19 @@ export class ScheduleComponent implements OnInit {
     const slotDate = new Date(day);
     slotDate.setHours(parseInt(slotHour), parseInt(slotMinute));
 
-    const meetings = this.filteredMeetings.filter(meeting => {
+    return this.filteredMeetings.filter(meeting => {
       if (meeting.date !== day) return false;
 
-      const [startHour, startMinute] = meeting.startTime.split(/[: ]/);
-      const [endHour, endMinute] = meeting.endTime.split(/[: ]/);
+      const [startHour, startMinute] = meeting.startTime.split(':').map(Number);
+      const [endHour, endMinute] = meeting.endTime.split(':').map(Number);
 
-      const startDate = new Date(day);
-      startDate.setHours(parseInt(startHour), parseInt(startMinute));
+      const meetingStartDate = new Date(day);
+      meetingStartDate.setHours(startHour, startMinute);
 
-      const endDate = new Date(day);
-      endDate.setHours(parseInt(endHour), parseInt(endMinute));
-
-      return startDate <= slotDate && slotDate < endDate;
+      // Only return meetings that start exactly at this slot's time
+      return meetingStartDate.getHours() === slotDate.getHours() &&
+        meetingStartDate.getMinutes() === slotDate.getMinutes();
     });
-    return meetings;
   }
 
   getMeetingTop(startTime: string, slotIndex: number): number {
@@ -146,6 +144,7 @@ export class ScheduleComponent implements OnInit {
     const [endHours, endMinutes] = endTime.split(':').map(Number);
     const startTotalMinutes: number = (startHours * 60) + startMinutes;
     const endTotalMinutes: number = (endHours * 60) + endMinutes;
+
     return endTotalMinutes - startTotalMinutes;
   }
 
