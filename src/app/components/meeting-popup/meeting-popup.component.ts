@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './meeting-popup.component.html',
   styleUrl: './meeting-popup.component.scss'
@@ -56,6 +56,7 @@ export class MeetingPopupComponent {
   onSubmit() {
     if (this.isEdit) {
       this.editMeeting.emit(this.meeting);
+
     } else {
       this.addMeeting.emit(this.meeting);
     }
