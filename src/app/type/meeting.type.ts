@@ -1,5 +1,5 @@
 export type Meeting = {
-    id: number,
+    id: number | undefined,
     date: string,
     startTime: string,
     endTime: string,

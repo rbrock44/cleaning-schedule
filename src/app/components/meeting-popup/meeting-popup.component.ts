@@ -17,6 +17,7 @@ export class MeetingPopupComponent {
   @Output() addMeeting = new EventEmitter<Meeting>()
   @Output() editMeeting = new EventEmitter<Meeting>()
   blankMeeting: Meeting = {
+    id: undefined,
     date: '',
     startTime: '',
     endTime: '',

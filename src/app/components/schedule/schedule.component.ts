@@ -13,7 +13,7 @@ import {
   getClosestMonday,
   getDayWithSuffix
 } from '../../utility/date/date';
-import {addMeeting, deleteMeeting, editMeeting, getMeetingsByWeek} from "../../services/meetingService";
+import {addMeeting, deleteMeeting, editMeeting, getAllMeetings, getMeetingsByWeek} from "../../services/meetingService";
 
 @Component({
   standalone: true,
@@ -186,50 +186,52 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
-  getMeetings() {
+  async getMeetings() {
     const fakeMeetings = [
-      {date: '2024-07-29', startTime: '07:30', endTime: '08:00', title: 'Meeting 1', person: 'Addie'},
-      {date: '2024-07-29', startTime: '08:00', endTime: '09:00', title: 'Ashley', person: 'Addie'},
-      {date: '2024-07-29', startTime: '13:00', endTime: '13:30', title: 'Dr Moon', person: 'Mitchelle'},
-      {date: '2024-07-29', startTime: '12:00', endTime: '14:00', title: 'Anne', person: 'Addie'},
-      {date: '2024-08-12', startTime: '08:00', endTime: '09:00', title: 'Team Sync', person: 'Addie'},
-      {date: '2024-08-12', startTime: '10:15', endTime: '11:00', title: 'Client Call', person: 'Addie'},
-      {date: '2024-08-12', startTime: '14:00', endTime: '15:00', title: 'Strategy Meeting', person: 'Samantha'},
-      {date: '2024-08-13', startTime: '08:30', endTime: '09:00', title: '1:1 with Addie', person: 'Mitchelle'},
-      {date: '2024-08-13', startTime: '13:00', endTime: '14:00', title: 'Development Update', person: 'Samantha'},
-      {date: '2024-08-13', startTime: '15:00', endTime: '15:30', title: 'Quick Sync', person: 'Mitchelle'},
-      {date: '2024-08-14', startTime: '09:00', endTime: '10:00', title: 'Team Standup', person: 'Addie'},
-      {date: '2024-08-14', startTime: '10:30', endTime: '11:30', title: 'Client Presentation', person: 'Samantha'},
-      {date: '2024-08-14', startTime: '13:00', endTime: '14:00', title: 'Feedback Session', person: 'Mitchelle'},
-      {date: '2024-08-14', startTime: '15:00', endTime: '16:00', title: 'All Hands Meeting', person: 'Addie'},
-      {date: '2024-08-15', startTime: '08:00', endTime: '09:00', title: 'Planning Session', person: 'Samantha'},
-      {date: '2024-08-15', startTime: '10:00', endTime: '11:00', title: 'Design Review', person: 'Mitchelle'},
-      {date: '2024-08-15', startTime: '14:30', endTime: '15:30', title: 'Sales Call', person: 'Samantha'},
-      {date: '2024-08-16', startTime: '09:00', endTime: '10:00', title: 'Weekly Sync', person: 'Addie'},
-      {date: '2024-08-16', startTime: '11:00', endTime: '12:00', title: 'Marketing Review', person: 'Mitchelle'},
-      {date: '2024-08-16', startTime: '13:00', endTime: '14:00', title: 'Product Launch', person: 'Samantha'},
-      {date: '2024-08-16', startTime: '15:00', endTime: '16:00', title: 'Retrospective', person: 'Addie'},
-      {date: '2024-08-19', startTime: '08:00', endTime: '09:00', title: 'Monday Kickoff', person: 'Addie'},
-      {date: '2024-08-19', startTime: '11:00', endTime: '12:00', title: 'Client Check-in', person: 'Samantha'},
-      {date: '2024-08-19', startTime: '14:00', endTime: '15:00', title: 'Tech Sync', person: 'Addie'},
-      {date: '2024-08-20', startTime: '08:30', endTime: '09:30', title: 'Design Discussion', person: 'Mitchelle'},
-      {date: '2024-08-20', startTime: '10:00', endTime: '11:00', title: 'Product Review', person: 'Addie'},
-      {date: '2024-08-20', startTime: '12:00', endTime: '13:00', title: 'HR Meeting', person: 'Samantha'},
-      {date: '2024-08-20', startTime: '14:30', endTime: '15:30', title: 'Code Review', person: 'Mitchelle'},
-      {date: '2024-08-21', startTime: '09:00', endTime: '10:00', title: 'Team Standup', person: 'Addie'},
-      {date: '2024-08-21', startTime: '10:30', endTime: '11:30', title: 'Client Call', person: 'Samantha'},
-      {date: '2024-08-22', startTime: '13:00', endTime: '14:00', title: 'Project Update', person: 'Mitchelle'},
-      {date: '2024-08-23', startTime: '12:00', endTime: '13:00', title: 'Lunch Meeting', person: 'Addie'},
-      {date: '2024-08-26', startTime: '09:30', endTime: '10:00', title: 'Project Update', person: 'Mitchelle'},
-      {date: '2024-08-27', startTime: '11:00', endTime: '12:00', title: 'Product Review', person: 'Addie'},
-      {date: '2024-08-28', startTime: '09:30', endTime: '10:30', title: 'Sprint Planning', person: 'Mitchelle'},
+      {id: undefined, date: '2024-07-29', startTime: '07:30', endTime: '08:00', title: 'Meeting 1', person: 'Addie'},
+      {id: undefined, date: '2024-07-29', startTime: '08:00', endTime: '09:00', title: 'Ashley', person: 'Addie'},
+      {id: undefined, date: '2024-07-29', startTime: '13:00', endTime: '13:30', title: 'Dr Moon', person: 'Mitchelle'},
+      {id: undefined, date: '2024-07-29', startTime: '12:00', endTime: '14:00', title: 'Anne', person: 'Addie'},
+      {id: undefined, date: '2024-08-12', startTime: '08:00', endTime: '09:00', title: 'Team Sync', person: 'Addie'},
+      {id: undefined, date: '2024-08-12', startTime: '10:15', endTime: '11:00', title: 'Client Call', person: 'Addie'},
+      {id: undefined, date: '2024-08-12', startTime: '14:00', endTime: '15:00', title: 'Strategy Meeting', person: 'Samantha'},
+      {id: undefined, date: '2024-08-13', startTime: '08:30', endTime: '09:00', title: '1:1 with Addie', person: 'Mitchelle'},
+      {id: undefined, date: '2024-08-13', startTime: '13:00', endTime: '14:00', title: 'Development Update', person: 'Samantha'},
+      {id: undefined, date: '2024-08-13', startTime: '15:00', endTime: '15:30', title: 'Quick Sync', person: 'Mitchelle'},
+      {id: undefined, date: '2024-08-14', startTime: '09:00', endTime: '10:00', title: 'Team Standup', person: 'Addie'},
+      {id: undefined, date: '2024-08-14', startTime: '10:30', endTime: '11:30', title: 'Client Presentation', person: 'Samantha'},
+      {id: undefined, date: '2024-08-14', startTime: '13:00', endTime: '14:00', title: 'Feedback Session', person: 'Mitchelle'},
+      {id: undefined, date: '2024-08-14', startTime: '15:00', endTime: '16:00', title: 'All Hands Meeting', person: 'Addie'},
+      {id: undefined, date: '2024-08-15', startTime: '08:00', endTime: '09:00', title: 'Planning Session', person: 'Samantha'},
+      {id: undefined, date: '2024-08-15', startTime: '10:00', endTime: '11:00', title: 'Design Review', person: 'Mitchelle'},
+      {id: undefined, date: '2024-08-15', startTime: '14:30', endTime: '15:30', title: 'Sales Call', person: 'Samantha'},
+      {id: undefined, date: '2024-08-16', startTime: '09:00', endTime: '10:00', title: 'Weekly Sync', person: 'Addie'},
+      {id: undefined, date: '2024-08-16', startTime: '11:00', endTime: '12:00', title: 'Marketing Review', person: 'Mitchelle'},
+      {id: undefined, date: '2024-08-16', startTime: '13:00', endTime: '14:00', title: 'Product Launch', person: 'Samantha'},
+      {id: undefined, date: '2024-08-16', startTime: '15:00', endTime: '16:00', title: 'Retrospective', person: 'Addie'},
+      {id: undefined, date: '2024-08-19', startTime: '08:00', endTime: '09:00', title: 'Monday Kickoff', person: 'Addie'},
+      {id: undefined, date: '2024-08-19', startTime: '11:00', endTime: '12:00', title: 'Client Check-in', person: 'Samantha'},
+      {id: undefined, date: '2024-08-19', startTime: '14:00', endTime: '15:00', title: 'Tech Sync', person: 'Addie'},
+      {id: undefined, date: '2024-08-20', startTime: '08:30', endTime: '09:30', title: 'Design Discussion', person: 'Mitchelle'},
+      {id: undefined, date: '2024-08-20', startTime: '10:00', endTime: '11:00', title: 'Product Review', person: 'Addie'},
+      {id: undefined, date: '2024-08-20', startTime: '12:00', endTime: '13:00', title: 'HR Meeting', person: 'Samantha'},
+      {id: undefined, date: '2024-08-20', startTime: '14:30', endTime: '15:30', title: 'Code Review', person: 'Mitchelle'},
+      {id: undefined, date: '2024-08-21', startTime: '09:00', endTime: '10:00', title: 'Team Standup', person: 'Addie'},
+      {id: undefined, date: '2024-08-21', startTime: '10:30', endTime: '11:30', title: 'Client Call', person: 'Samantha'},
+      {id: undefined, date: '2024-08-22', startTime: '13:00', endTime: '14:00', title: 'Project Update', person: 'Mitchelle'},
+      {id: undefined, date: '2024-08-23', startTime: '12:00', endTime: '13:00', title: 'Lunch Meeting', person: 'Addie'},
+      {id: undefined, date: '2024-08-26', startTime: '09:30', endTime: '10:00', title: 'Project Update', person: 'Mitchelle'},
+      {id: undefined, date: '2024-08-27', startTime: '11:00', endTime: '12:00', title: 'Product Review', person: 'Addie'},
+      {id: undefined, date: '2024-08-28', startTime: '09:30', endTime: '10:30', title: 'Sprint Planning', person: 'Mitchelle'},
     ];
 
-    const apiMeetings = getMeetingsByWeek(formatDate(this.startDate));
+    // TODO: change to week, maybe?
+    // const apiMeetings = await getMeetingsByWeek(formatDate(this.startDate));
+    const apiMeetings = await getAllMeetings();
 
-    // TODO: wire up http call for meetings for this week
     this.allMeetings = [
-      ...fakeMeetings
+      // HELPFUL: add fake meetings if running locally and need to see some
+      ...apiMeetings
     ];
 
     this.filterMeetings();
@@ -259,31 +261,33 @@ export class ScheduleComponent implements OnInit {
     return Array.from(new Set(this.allMeetings.map(x => x.person))).sort();
   }
 
-  addMeetingCall(meeting: Meeting): void {
-    addMeeting(meeting).then(success => {
-        if (!success) {
-          this.editMeetingPopup(meeting);
-        }
-      }
-    );
+  async addMeetingCall(meeting: Meeting): Promise<void> {
+    const success = await addMeeting(meeting);
+
+    if (!success) {
+      this.editMeetingPopup(meeting);
+    } else {
+      await this.getMeetings();
+    }
   }
 
-  editMeetingCall(meeting: Meeting): void {
-    editMeeting(meeting).then(success => {
-        if (!success) {
-          this.editMeetingPopup(meeting);
-        }
-      }
-    );
+  async editMeetingCall(meeting: Meeting): Promise<void> {
+    const success = await editMeeting(meeting);
+
+    if (!success) {
+      this.editMeetingPopup(meeting);
+    } else {
+      await this.getMeetings();
+    }
   }
 
-  deleteMeetingCall(meeting: Meeting): void {
-    deleteMeeting(meeting.id).then(success => {
-      if (!success) {
-        this.editMeetingPopup(meeting);
-      } else {
-        // TODO: delete meeting from array
-      }
-    });
+  async deleteMeetingCall(meeting: Meeting): Promise<void> {
+    const success = await deleteMeeting(meeting.id!)
+
+    if (!success) {
+      this.editMeetingPopup(meeting);
+    } else {
+      await this.getMeetings();
+    }
   }
 }

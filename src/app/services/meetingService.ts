@@ -1,9 +1,9 @@
 import {Meeting} from "../type/meeting.type";
 
-const baseUrl = 'https://home-page-api-34607.herokuapp.com';
+const baseUrl = 'https://home-page-api-34607.herokuapp.com/cleaning-schedule';
 
 export async function getMeetingsByWeek(startOfWeek: string): Promise<Meeting[]> {
-  const apiUrl = baseUrl + '/week';
+  const apiUrl = baseUrl + `/week?startDate=${startOfWeek}`;
 
   const response = await fetch(apiUrl, {
     method: 'GET',
@@ -11,13 +11,23 @@ export async function getMeetingsByWeek(startOfWeek: string): Promise<Meeting[]>
       'Content-Type': 'application/json'
     },
     cache: 'no-store',
-
   });
   const data = (await response.json()) as unknown;
 
-  // TODO: convert to meeting array
+  return data as Meeting[];
+}
 
-  return [];
+export async function getAllMeetings(): Promise<Meeting[]> {
+  const response = await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    cache: 'no-store',
+  });
+  const data = (await response.json()) as unknown;
+
+  return data as Meeting[];
 }
 
 export async function editMeeting(meeting: Meeting): Promise<boolean> {
@@ -51,7 +61,9 @@ export async function addMeeting(meeting: Meeting): Promise<boolean> {
 }
 
 export async function deleteMeeting(id: number): Promise<boolean> {
-  const response = await fetch(baseUrl, {
+  const apiUrl = baseUrl + `?id=${id}`;
+
+  const response = await fetch(apiUrl, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'
