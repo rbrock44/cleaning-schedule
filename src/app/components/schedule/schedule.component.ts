@@ -108,7 +108,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   assignColors() {
-    const uniquePersons = [...new Set(this.filteredMeetings.map(meeting => meeting.person))];
+    const uniquePersons = [...new Set(this.allMeetings.map(meeting => meeting.person))];
     uniquePersons.forEach(person => {
       const color: string = getUniqueRandomColor(this.people);
 
