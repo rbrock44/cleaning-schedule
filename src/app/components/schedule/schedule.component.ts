@@ -40,16 +40,20 @@ export class ScheduleComponent implements OnInit {
 
   people: People = {};
 
+  loading: boolean = false;
+
   ngOnInit() {
-    this.setup().then(() => {
-      this.days = generateDays(this.startDate);
-      this.timeSlots = generateTimeSlots();
-    });
+    this.days = generateDays(this.startDate);
+    this.timeSlots = generateTimeSlots();
+    this.setup().then(() => {});
   }
 
   async setup(): Promise<void> {
+    this.loading = true;
     await this.getMeetings();
     this.assignColors();
+
+    this.loading = false;
   }
 
   parseDayWithSuffix(date: string): string {
@@ -286,7 +290,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   async deleteMeetingCall(meeting: Meeting): Promise<void> {
-    const success = await deleteMeeting(meeting.id!)
+    const success = await deleteMeeting(meeting.id!);
 
     if (!success) {
       this.editMeetingPopup(meeting);
