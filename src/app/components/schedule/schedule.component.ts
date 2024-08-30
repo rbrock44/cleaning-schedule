@@ -6,14 +6,13 @@ import {Meeting, TimeSlot} from '../../type/meeting.type';
 import {People, Shades} from '../../type/person.type';
 import {getUniqueLightenedColor, getUniqueRandomColor} from '../../utility/color/color';
 import {
-  formatDate,
   formatMonthAndYear,
   generateDays,
   generateTimeSlots,
   getClosestMonday,
   getDayWithSuffix
 } from '../../utility/date/date';
-import {addMeeting, deleteMeeting, editMeeting, getAllMeetings, getMeetingsByWeek} from "../../services/meetingService";
+import {addMeeting, deleteMeeting, editMeeting, getAllMeetings} from "../../services/meetingService";
 
 @Component({
   standalone: true,
@@ -42,10 +41,15 @@ export class ScheduleComponent implements OnInit {
   people: People = {};
 
   ngOnInit() {
-    this.getMeetings();
+    this.setup().then(() => {
+      this.days = generateDays(this.startDate);
+      this.timeSlots = generateTimeSlots();
+    });
+  }
+
+  async setup(): Promise<void> {
+    await this.getMeetings();
     this.assignColors();
-    this.days = generateDays(this.startDate);
-    this.timeSlots = generateTimeSlots();
   }
 
   parseDayWithSuffix(date: string): string {
@@ -267,7 +271,7 @@ export class ScheduleComponent implements OnInit {
     if (!success) {
       this.editMeetingPopup(meeting);
     } else {
-      await this.getMeetings();
+      await this.setup();
     }
   }
 
@@ -277,7 +281,7 @@ export class ScheduleComponent implements OnInit {
     if (!success) {
       this.editMeetingPopup(meeting);
     } else {
-      await this.getMeetings();
+      await this.setup();
     }
   }
 
@@ -287,7 +291,7 @@ export class ScheduleComponent implements OnInit {
     if (!success) {
       this.editMeetingPopup(meeting);
     } else {
-      await this.getMeetings();
+      await this.setup();
     }
   }
 }
