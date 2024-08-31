@@ -233,12 +233,11 @@ export class ScheduleComponent implements OnInit {
       {id: undefined, date: '2024-08-28', startTime: '09:30', endTime: '10:30', title: 'Sprint Planning', person: 'Mitchelle'},
     ];
 
-    // TODO: change to week, maybe?
-    // const apiMeetings = await getMeetingsByWeek(formatDate(this.startDate));
     const apiMeetings = await getAllMeetings();
 
     this.allMeetings = [
       // HELPFUL: add fake meetings if running locally and need to see some
+      // fakeMeetings,
       ...apiMeetings
     ];
 
@@ -289,6 +288,7 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
+  // TODO: make delete putting and confirm popup
   async deleteMeetingCall(meeting: Meeting): Promise<void> {
     const success = await deleteMeeting(meeting.id!);
 
