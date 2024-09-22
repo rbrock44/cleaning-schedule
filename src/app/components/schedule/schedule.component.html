@@ -4,7 +4,7 @@
       <span>&larr;</span>
     </button>
     <select [(ngModel)]="selectedValue" (change)="filterMeetings()">
-      <option *ngFor="let option of personDropdownOptions" [value]="option">{{option}}</option>
+      <option *ngFor="let option of personDropdownOptions" [value]="option">{{ option }}</option>
     </select>
     <button class="arrow-btn right-arrow" (click)="forwardArrowClick()">
       <span>&rarr;</span>
@@ -12,8 +12,8 @@
   </div>
   <div>
     <div class="month-container">
-      <div class={{getMonthBannerClassname(0)}}>{{getFirstMonth()}}</div>
-      <div class={{getMonthBannerClassname(1)}} *ngIf="hasSecondMonth()">{{getSecondMonth()}}</div>
+      <div class={{getMonthBannerClassname(0)}}>{{ getFirstMonth() }}</div>
+      <div class={{getMonthBannerClassname(1)}} *ngIf="hasSecondMonth()">{{ getSecondMonth() }}</div>
     </div>
   </div>
 
@@ -23,7 +23,7 @@
         <button class="plus-button" (click)="addMeetingPopup(day)">
           <span>+</span>
         </button>
-        {{this.parseDayWithSuffix(day)}}
+        {{ this.parseDayWithSuffix(day) }}
         <button class="refresh-button" (click)="getMeetings()">
           <span>&#x21bb;</span>
         </button>
@@ -42,5 +42,10 @@
     </div>
   </div>
 
-  <app-meeting-popup #meetingPopup (editMeeting)="editMeetingCall($event)" (addMeeting)="addMeetingCall($event)"/>
+  <app-meeting-popup
+    #meetingPopup
+    (editMeeting)="editMeetingCall($event)"
+    (addMeeting)="addMeetingCall($event)"
+    (deleteMeeting)="deleteMeetingCall($event)"
+  />
 </div>
