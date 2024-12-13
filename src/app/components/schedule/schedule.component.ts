@@ -152,11 +152,11 @@ export class ScheduleComponent implements OnInit {
 
       uniqueTitlesPerPerson.forEach(title => {
         // shades[title] = getUniqueLightenedColor(shades, color);
-        shades[title] = 'fffff';
+        shades[title] = 'cccccc';
       });
 
       this.people[person] = {
-        color: 'fffff',
+        color: 'cccccc',
         shades: shades
       };
     });
