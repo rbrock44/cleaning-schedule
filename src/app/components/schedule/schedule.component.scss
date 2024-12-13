@@ -43,6 +43,11 @@
 }
 
 .meeting {
+  border-radius: 0.3rem;
+  background-color: lightblue;
+  border: 1px solid blue;
+  text-overflow: ellipsis;
+  cursor: pointer;
   display: flex;
   align-items: center;  /* Centers content vertically */
   justify-content: center;  /* Centers content horizontally */
@@ -54,16 +59,6 @@
 .meetings-container {
   margin-left: 40px;
 }
-
-//.meeting {
-//  border-radius: 0.3rem;
-//  background-color: lightblue;
-//  border: 1px solid blue;
-//  padding: 2px;
-//  box-sizing: border-box;
-//  text-overflow: ellipsis;
-//  cursor: pointer;
-//}
 
 .arrow-container {
   display: flex;
@@ -192,15 +187,6 @@ span {
   border-radius: 8px;
   margin-bottom: 15px;
   background-color: #f9f9f9;
-}
-
-/* Meeting */
-.meeting {
-  padding: 10px;
-  border-radius: 4px;
-  color: white;
-  font-size: 14px;
-  margin-bottom: 10px; /* Space between meetings */
 }
 
 /* Dynamic Margin for Mobile */
