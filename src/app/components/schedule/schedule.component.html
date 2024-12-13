@@ -101,12 +101,13 @@
                (click)="editMeetingPopup(meeting)"
                [ngStyle]="{'background-color': getShadeForMeeting(meeting), 'margin-top.px': getMeetingPadding(meeting.startTime)}">
             {{ meeting.person }}: {{ meeting.title }}
+            <br/>
+            {{meeting.startTime}} - {{meeting.endTime}}
           </div>
         </div>
       </div>
     </div>
   </div>
-
 
   <app-meeting-popup
     #meetingPopup

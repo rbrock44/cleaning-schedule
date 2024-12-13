@@ -175,23 +175,18 @@ span {
 .schedule-container.mobile {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
 /* Mobile Day Column */
 .day-column-horizontal {
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 50px;
   border: 1px solid #ccc;
   border-radius: 8px;
   margin-bottom: 15px;
   background-color: #f9f9f9;
-}
-
-/* Dynamic Margin for Mobile */
-.meeting:not(:first-child) {
-  margin-top: var(--dynamic-spacing, 10px);
 }
 
 /* Responsive Design */
