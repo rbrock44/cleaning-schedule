@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MeetingPopupComponent} from '../meeting-popup/meeting-popup.component';
 import {Meeting, TimeSlot} from '../../type/meeting.type';
@@ -12,7 +12,7 @@ import {
   getClosestMonday,
   getDayWithSuffix
 } from '../../utility/date/date';
-import {addMeeting, deleteMeeting, editMeeting} from "../../services/meetingService";
+import {addMeeting, deleteMeeting, editMeeting, getAllMeetings} from "../../services/meetingService";
 
 @Component({
   standalone: true,
@@ -27,6 +27,12 @@ import {addMeeting, deleteMeeting, editMeeting} from "../../services/meetingServ
 })
 export class ScheduleComponent implements OnInit {
   @ViewChild('meetingPopup') meetingPopup!: MeetingPopupComponent;
+  isMobile: boolean = (typeof window != 'undefined') && window.innerWidth <= 768;
+
+  @HostListener('window:resize')
+  onResize() {
+    this.isMobile = window.innerWidth <= 768;
+  }
 
   defaultDropdownOption: string = 'All';
   personDropdownOptions: string[] = [this.defaultDropdownOption];
@@ -54,6 +60,27 @@ export class ScheduleComponent implements OnInit {
     this.assignColors();
 
     this.loading = false;
+  }
+
+  getMeetingPadding(startTime: string) {
+    // Calculate padding based on start time
+    const time = new Date(`1970-01-01T${startTime}`);
+    return time.getHours() * 10 + time.getMinutes() / 6; // Example: Scale padding
+  }
+
+  getMeetingsForDay(day: string) {
+    return this.allMeetings.filter(meeting => meeting.date === day);
+  }
+
+  isMonthChange(index: number): boolean {
+    if (index === 0) return false; // No change for the first day
+    const currentDay = this.days[index];
+    const previousDay = this.days[index - 1];
+    return this.getMonth(currentDay) !== this.getMonth(previousDay);
+  }
+
+  getMonthForDay(day: string): string {
+    return formatMonthAndYear(day);
   }
 
   parseDayWithSuffix(date: string): string {
@@ -118,17 +145,18 @@ export class ScheduleComponent implements OnInit {
   assignColors() {
     const uniquePersons = [...new Set(this.allMeetings.map(meeting => meeting.person))];
     uniquePersons.forEach(person => {
-      const color: string = getUniqueRandomColor(this.people);
-
+      // const color: string = getUniqueRandomColor(this.people);
+      //
       const shades: Shades = {}
       const uniqueTitlesPerPerson = [...new Set(this.filteredMeetings.filter(meeting => meeting.person === person).map(meeting => meeting.title))];
 
       uniqueTitlesPerPerson.forEach(title => {
-        shades[title] = getUniqueLightenedColor(shades, color);
+        // shades[title] = getUniqueLightenedColor(shades, color);
+        shades[title] = 'fffff';
       });
 
       this.people[person] = {
-        color: color,
+        color: 'fffff',
         shades: shades
       };
     });
@@ -233,12 +261,12 @@ export class ScheduleComponent implements OnInit {
       {id: undefined, date: '2024-08-28', startTime: '09:30', endTime: '10:30', title: 'Sprint Planning', person: 'Mitchelle'},
     ];
 
-    // const apiMeetings = await getAllMeetings();
+    const apiMeetings = await getAllMeetings();
 
     this.allMeetings = [
       // HELPFUL: add fake meetings if running locally and need to see some
-      ...fakeMeetings,
-      // ...apiMeetings
+      // ...fakeMeetings,
+      ...apiMeetings
     ];
 
     this.filterMeetings();
