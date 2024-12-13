@@ -99,7 +99,7 @@
         <div class="meetings-container">
           <div class="meeting" *ngFor="let meeting of getMeetingsForDay(day)"
                (click)="editMeetingPopup(meeting)"
-               [ngStyle]="{'background-color': getShadeForMeeting(meeting), 'margin-top.px': getMeetingPadding(meeting.startTime)}">
+               [ngStyle]="{'background-color': getShadeForMeeting(meeting), 'height.px': getMeetingHeight(meeting.startTime, meeting.endTime, true)}">
             {{ meeting.person }}: {{ meeting.title }}
             <br/>
             {{meeting.startTime}} - {{meeting.endTime}}

@@ -182,10 +182,10 @@ span {
 .day-column-horizontal {
   display: flex;
   flex-direction: column;
-  padding: 50px;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   background-color: #f9f9f9;
 }
 
@@ -197,5 +197,15 @@ span {
 
   .schedule-container.mobile {
     display: flex;
+  }
+
+  .meetings-container {
+    margin-left: 0;
+    gap: 5px;
+    display: inline-grid;
+  }
+
+  .meeting {
+    margin-top: 0;
   }
 }

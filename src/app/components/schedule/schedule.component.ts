@@ -62,12 +62,6 @@ export class ScheduleComponent implements OnInit {
     this.loading = false;
   }
 
-  getMeetingPadding(startTime: string) {
-    // Calculate padding based on start time
-    const time = new Date(`1970-01-01T${startTime}`);
-    return time.getHours() * 10 + time.getMinutes() / 6; // Example: Scale padding
-  }
-
   getMeetingsForDay(day: string) {
     return this.allMeetings.filter(meeting => meeting.date === day);
   }
@@ -191,11 +185,18 @@ export class ScheduleComponent implements OnInit {
     return ((hours % 12) * 60 + minutes) - (slotIndex * 30);
   }
 
-  getMeetingHeight(startTime: string, endTime: string): number {
+  getMeetingHeight(startTime: string, endTime: string, isMobile = false): number {
     const [startHours, startMinutes] = startTime.split(':').map(Number);
     const [endHours, endMinutes] = endTime.split(':').map(Number);
     const startTotalMinutes: number = (startHours * 60) + startMinutes;
     const endTotalMinutes: number = (endHours * 60) + endMinutes;
+
+    if (isMobile) {
+      const value = endTotalMinutes - startTotalMinutes;
+      if (value < 35) {
+        return 35;
+      }
+    }
 
     return endTotalMinutes - startTotalMinutes;
   }
