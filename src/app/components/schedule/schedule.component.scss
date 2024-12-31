@@ -43,6 +43,11 @@
 }
 
 .meeting {
+  border-radius: 0.3rem;
+  background-color: lightblue;
+  border: 1px solid blue;
+  text-overflow: ellipsis;
+  cursor: pointer;
   display: flex;
   align-items: center;  /* Centers content vertically */
   justify-content: center;  /* Centers content horizontally */
@@ -53,16 +58,6 @@
 
 .meetings-container {
   margin-left: 40px;
-}
-
-.meeting {
-  border-radius: 0.3rem;
-  background-color: lightblue;
-  border: 1px solid blue;
-  padding: 2px;
-  box-sizing: border-box;
-  text-overflow: ellipsis;
-  cursor: pointer;
 }
 
 .arrow-container {
@@ -167,4 +162,50 @@ span {
 
 .refresh-button {
   border-radius: 25%;
+}
+
+/* Desktop Schedule */
+.schedule-container.desktop {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+}
+
+/* Mobile Schedule */
+.schedule-container.mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Mobile Day Column */
+.day-column-horizontal {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  background-color: #f9f9f9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .schedule-container.desktop {
+    display: none;
+  }
+
+  .schedule-container.mobile {
+    display: flex;
+  }
+
+  .meetings-container {
+    margin-left: 0;
+    gap: 5px;
+    display: inline-grid;
+  }
+
+  .meeting {
+    margin-top: 0;
+  }
 }

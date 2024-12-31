@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MeetingPopupComponent} from '../meeting-popup/meeting-popup.component';
 import {Meeting, TimeSlot} from '../../type/meeting.type';
@@ -27,6 +27,12 @@ import {addMeeting, deleteMeeting, editMeeting, getAllMeetings} from "../../serv
 })
 export class ScheduleComponent implements OnInit {
   @ViewChild('meetingPopup') meetingPopup!: MeetingPopupComponent;
+  isMobile: boolean = (typeof window != 'undefined') && window.innerWidth <= 768;
+
+  @HostListener('window:resize')
+  onResize() {
+    this.isMobile = window.innerWidth <= 768;
+  }
 
   defaultDropdownOption: string = 'All';
   personDropdownOptions: string[] = [this.defaultDropdownOption];
@@ -54,6 +60,21 @@ export class ScheduleComponent implements OnInit {
     this.assignColors();
 
     this.loading = false;
+  }
+
+  getMeetingsForDay(day: string) {
+    return this.allMeetings.filter(meeting => meeting.date === day);
+  }
+
+  isMonthChange(index: number): boolean {
+    if (index === 0) return false; // No change for the first day
+    const currentDay = this.days[index];
+    const previousDay = this.days[index - 1];
+    return this.getMonth(currentDay) !== this.getMonth(previousDay);
+  }
+
+  getMonthForDay(day: string): string {
+    return formatMonthAndYear(day);
   }
 
   parseDayWithSuffix(date: string): string {
@@ -118,17 +139,18 @@ export class ScheduleComponent implements OnInit {
   assignColors() {
     const uniquePersons = [...new Set(this.allMeetings.map(meeting => meeting.person))];
     uniquePersons.forEach(person => {
-      const color: string = getUniqueRandomColor(this.people);
-
+      // const color: string = getUniqueRandomColor(this.people);
+      //
       const shades: Shades = {}
       const uniqueTitlesPerPerson = [...new Set(this.filteredMeetings.filter(meeting => meeting.person === person).map(meeting => meeting.title))];
 
       uniqueTitlesPerPerson.forEach(title => {
-        shades[title] = getUniqueLightenedColor(shades, color);
+        // shades[title] = getUniqueLightenedColor(shades, color);
+        shades[title] = 'cccccc';
       });
 
       this.people[person] = {
-        color: color,
+        color: 'cccccc',
         shades: shades
       };
     });
@@ -163,11 +185,18 @@ export class ScheduleComponent implements OnInit {
     return ((hours % 12) * 60 + minutes) - (slotIndex * 30);
   }
 
-  getMeetingHeight(startTime: string, endTime: string): number {
+  getMeetingHeight(startTime: string, endTime: string, isMobile = false): number {
     const [startHours, startMinutes] = startTime.split(':').map(Number);
     const [endHours, endMinutes] = endTime.split(':').map(Number);
     const startTotalMinutes: number = (startHours * 60) + startMinutes;
     const endTotalMinutes: number = (endHours * 60) + endMinutes;
+
+    if (isMobile) {
+      const value = endTotalMinutes - startTotalMinutes;
+      if (value < 35) {
+        return 35;
+      }
+    }
 
     return endTotalMinutes - startTotalMinutes;
   }
@@ -237,7 +266,7 @@ export class ScheduleComponent implements OnInit {
 
     this.allMeetings = [
       // HELPFUL: add fake meetings if running locally and need to see some
-      // fakeMeetings,
+      // ...fakeMeetings,
       ...apiMeetings
     ];
 
@@ -288,7 +317,6 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
-  // TODO: make delete putting and confirm popup
   async deleteMeetingCall(meeting: Meeting): Promise<void> {
     const success = await deleteMeeting(meeting.id!);
 

@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import { Meeting } from '../../type/meeting.type';
 import { FormsModule } from '@angular/forms';
+import {ConfirmationPopupComponent} from "../confirmation-popup/confirmation-popup.component";
+import {deleteMeeting} from "../../services/meetingService";
 
 @Component({
   selector: 'app-meeting-popup',
@@ -9,13 +11,17 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     FormsModule,
+    ConfirmationPopupComponent,
   ],
   templateUrl: './meeting-popup.component.html',
   styleUrl: './meeting-popup.component.scss'
 })
 export class MeetingPopupComponent {
+  @ViewChild('confirmationPopup') confirmationPopup!: ConfirmationPopupComponent;
+
   @Output() addMeeting = new EventEmitter<Meeting>()
   @Output() editMeeting = new EventEmitter<Meeting>()
+  @Output() deleteMeeting = new EventEmitter<Meeting>()
   blankMeeting: Meeting = {
     id: undefined,
     date: '',
@@ -84,5 +90,15 @@ export class MeetingPopupComponent {
 
   hideDropdown(): void {
     this.showAutocomplete = false;
+  }
+
+  deleteMeetingLocal(confirmed: boolean): void {
+    if (confirmed) {
+      this.deleteMeeting.emit(this.meeting);
+    }
+  }
+
+  confirmDeleteMeeting(): void {
+    this.confirmationPopup.openPopup(this.meeting);
   }
 }
