@@ -1,6 +1,6 @@
 import {Meeting} from "../type/meeting.type";
 
-const baseUrl = 'https://home-page-api-34607.herokuapp.com/cleaning-schedule';
+const baseUrl = 'https://home-page-api.ryan-brock.com/cleaning-schedule';
 
 export async function getMeetingsByWeek(startOfWeek: string): Promise<Meeting[]> {
   const apiUrl = baseUrl + `/week?startDate=${startOfWeek}`;
