@@ -3,11 +3,18 @@
 > This project centralizes multiple peoples' cleaning schedule <br/>
 > [Live - Cleaning Schedule Website](https://cleaning-schedule.ryan-brock.com/)
 
+Screenshots:
+![preview](/screenshots/main.png)
+![main mobile](/screenshots/main-mobile.png)
+![add meeting](/screenshots/add-meeting.png)
+![edit meeting](/screenshots/edit-meeting.png)
+
 ---
 
 ## 📚 Table of Contents
 
 - [What's My Purpose?](#-whats-my-purpose)
+- [How to Use](#-how-to-use)
 - [Technologies](#-technologies)
 - [Getting Started (Local Setup)](#-getting-started-local-setup)
   - [Run Locally](#run-locally)
@@ -21,6 +28,25 @@
 ## 🧠 What's My Purpose?
 
 This is a server side single-page angular frontend created to centralize several peoples' cleaning schedule for quick and easy access. It communicates with [Home Page Api](https://github.com/rbrock44/home-page-api) for cleaning schedule data
+
+---
+
+## 🚦 How to Use
+
+- `Add Meeting` - Select the `+` button, on the days header to add a meeting. The following fields are needed:
+    - Date
+    - Start time
+    - End Time
+    - Title
+    - Person
+- `Edit Meeting` - Selecting a meeting will open the edit meeting menu
+    - `Delete` button permanently deletes the meeting
+
+Screenshots:
+![preview](/screenshots/main.png)
+![main mobile](/screenshots/main-mobile.png)
+![add meeting](/screenshots/add-meeting.png)
+![edit meeting](/screenshots/edit-meeting.png)
 
 ---
 
