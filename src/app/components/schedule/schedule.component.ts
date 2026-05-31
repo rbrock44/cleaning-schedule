@@ -288,12 +288,12 @@ export class ScheduleComponent implements OnInit {
       hasBeenPaid: false,
     }));
 
-    // const apiMeetings = await getAllMeetings();
+    const apiMeetings = await getAllMeetings();
 
     this.allMeetings = [
       // HELPFUL: add fake meetings if running locally and need to see some
-      ...fakeMeetings,
-      // ...apiMeetings
+      // ...fakeMeetings,
+      ...apiMeetings
     ];
 
     this.filterMeetings();
