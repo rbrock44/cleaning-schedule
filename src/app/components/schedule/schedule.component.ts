@@ -63,7 +63,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   getMeetingsForDay(day: string) {
-    return this.allMeetings.filter(meeting => meeting.date === day);
+    return this.filteredMeetings.filter(meeting => meeting.date === day);
   }
 
   isMonthChange(index: number): boolean {
