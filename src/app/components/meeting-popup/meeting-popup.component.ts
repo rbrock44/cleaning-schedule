@@ -43,7 +43,8 @@ export class MeetingPopupComponent {
     this.personOptions = personOptions
     this.meeting = {
       ...structuredClone(this.blankMeeting),
-      date: defaultDay
+      date: defaultDay,
+      person: 'Addie'
     };
     this.isEdit = false;
     this.showPopup = true;

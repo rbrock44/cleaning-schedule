@@ -26,6 +26,7 @@
   border-radius: var(--md-sys-shape-corner-large);
   box-shadow: var(--md-sys-elevation-3);
   max-height: calc(100dvh - 2rem);
+  box-sizing: border-box;
 }
 
 .popup-content {
@@ -199,9 +200,16 @@ button.delete {
     max-height: calc(100svh - max(0.6rem, env(safe-area-inset-top)) - max(0.6rem, env(safe-area-inset-bottom)) - 0.6rem);
   }
 
+  input[type="text"],
+  input[type="date"],
+  input[type="time"] {
+    max-width: 100%;
+    min-width: 0;
+  }
+
   .popup-body {
-    max-height: calc(100dvh - max(0.6rem, env(safe-area-inset-top)) - max(0.6rem, env(safe-area-inset-bottom)) - 8.4rem);
-    max-height: calc(100svh - max(0.6rem, env(safe-area-inset-top)) - max(0.6rem, env(safe-area-inset-bottom)) - 8.4rem);
+    max-height: none;
+    overflow-y: visible;
   }
 
   .form-row {
