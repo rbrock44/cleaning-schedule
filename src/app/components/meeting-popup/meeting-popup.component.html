@@ -45,6 +45,15 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="hidden-checkbox-row" *ngIf="isEdit">
+                        <input
+                            type="checkbox"
+                            id="hiddenCheckbox"
+                            name="hasBeenPaid"
+                            [(ngModel)]="meeting.hasBeenPaid"
+                            aria-label="Meeting flag"
+                        >
+                    </div>
                     <div class="meeting-buttons">
                         <button *ngIf="!isEdit" type="submit" class="primary" [disabled]="!meetingForm.form.valid">Create</button>
                         <button *ngIf="isEdit" type="submit" class="primary" [disabled]="!meetingForm.form.valid">Edit</button>

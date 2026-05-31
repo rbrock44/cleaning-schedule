@@ -247,7 +247,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   async getMeetings() {
-    const fakeMeetings = [
+    const fakeMeetings: Meeting[] = [
       {id: undefined, date: '2024-07-29', startTime: '07:30', endTime: '08:00', title: 'Meeting 1', person: 'Addie'},
       {id: undefined, date: '2024-07-29', startTime: '08:00', endTime: '09:00', title: 'Ashley', person: 'Addie'},
       {id: undefined, date: '2024-07-29', startTime: '13:00', endTime: '13:30', title: 'Dr Moon', person: 'Mitchelle'},
@@ -283,7 +283,10 @@ export class ScheduleComponent implements OnInit {
       {id: undefined, date: '2024-08-26', startTime: '09:30', endTime: '10:00', title: 'Project Update', person: 'Mitchelle'},
       {id: undefined, date: '2026-05-29', startTime: '11:00', endTime: '12:00', title: 'Product Review', person: 'Addie'},
       {id: undefined, date: '2026-05-28', startTime: '09:30', endTime: '12:30', title: 'Sprint Planning', person: 'Mitchelle'},
-    ];
+    ].map(meeting => ({
+      ...meeting,
+      hasBeenPaid: false,
+    }));
 
     // const apiMeetings = await getAllMeetings();
 

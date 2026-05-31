@@ -28,7 +28,8 @@ export class MeetingPopupComponent {
     startTime: '',
     endTime: '',
     title: '',
-    person: ''
+    person: '',
+    hasBeenPaid: false
   };
 
   showPopup: boolean = false;
@@ -50,7 +51,10 @@ export class MeetingPopupComponent {
 
   openPopupEdit(meeting: Meeting, personOptions: string[]) {
     this.personOptions = personOptions
-    this.meeting = structuredClone(meeting);
+    this.meeting = {
+      ...structuredClone(meeting),
+      hasBeenPaid: !!meeting.hasBeenPaid,
+    };
     this.isEdit = true;
     this.showPopup = true;
   }

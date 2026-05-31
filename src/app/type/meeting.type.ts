@@ -4,7 +4,8 @@ export type Meeting = {
     startTime: string,
     endTime: string,
     title: string,
-    person: string
+    person: string,
+    hasBeenPaid?: boolean | undefined
 };
 
 export type TimeSlot = {

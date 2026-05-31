@@ -137,6 +137,20 @@ button.delete {
   margin-top: 0.4rem;
 }
 
+.hidden-checkbox-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.hidden-checkbox-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--md-sys-color-primary);
+  cursor: pointer;
+}
+
 .autocomplete-group {
   position: relative;
 }
