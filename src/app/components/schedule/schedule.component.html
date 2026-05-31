@@ -1,12 +1,12 @@
-<div class="container" *ngIf="!loading">
+<div class="schedule-shell" *ngIf="!loading">
   <div class="arrow-container">
-    <button class="arrow-btn left-arrow" (click)="backwardArrowClick()">
+    <button type="button" class="arrow-btn left-arrow" (click)="backwardArrowClick()" aria-label="Previous week">
       <span>&larr;</span>
     </button>
-    <select [(ngModel)]="selectedValue" (change)="filterMeetings()">
+    <select [(ngModel)]="selectedValue" (change)="filterMeetings()" aria-label="Filter by person">
       <option *ngFor="let option of personDropdownOptions" [value]="option">{{ option }}</option>
     </select>
-    <button class="arrow-btn right-arrow" (click)="forwardArrowClick()">
+    <button type="button" class="arrow-btn right-arrow" (click)="forwardArrowClick()" aria-label="Next week">
       <span>&rarr;</span>
     </button>
   </div>
@@ -40,8 +40,8 @@
   <div *ngIf="!isMobile">
     <div>
       <div class="month-container">
-        <div class={{getMonthBannerClassname(0)}}>{{ getFirstMonth() }}</div>
-        <div class={{getMonthBannerClassname(1)}} *ngIf="hasSecondMonth()">{{ getSecondMonth() }}</div>
+        <div [ngClass]="getMonthBannerClassname(0)">{{ getFirstMonth() }}</div>
+        <div [ngClass]="getMonthBannerClassname(1)" *ngIf="hasSecondMonth()">{{ getSecondMonth() }}</div>
       </div>
     </div>
 
@@ -51,11 +51,11 @@
 
       <div class="day-column" *ngFor="let day of days">
         <div class="day-header">
-          <button class="plus-button" (click)="addMeetingPopup(day)">
+          <button type="button" class="plus-button" (click)="addMeetingPopup(day)" aria-label="Add meeting">
             <span>+</span>
           </button>
           {{ parseDayWithSuffix(day) }}
-          <button class="refresh-button" (click)="getMeetings()">
+          <button type="button" class="refresh-button" (click)="getMeetings()" aria-label="Refresh meetings">
             <span>&#x21bb;</span>
           </button>
         </div>
@@ -66,7 +66,7 @@
               <div class="meeting" *ngFor="let meeting of getMeetingsForTime(day, i)"
                    (click)="editMeetingPopup(meeting)"
                    [ngStyle]="{'background-color': getShadeForMeeting(meeting), 'height.px': getMeetingHeight(meeting.startTime, meeting.endTime)}">
-                {{ meeting.person }}: {{ meeting.title }}
+                <span class="meeting-primary">{{ meeting.person }}: {{ meeting.title }}</span>
               </div>
             </div>
           </div>
@@ -88,11 +88,11 @@
       <!-- Day Column -->
       <div class="day-column-horizontal">
         <div class="day-header">
-          <button class="plus-button" (click)="addMeetingPopup(day)">
+          <button type="button" class="plus-button" (click)="addMeetingPopup(day)" aria-label="Add meeting">
             <span>+</span>
           </button>
           {{ parseDayWithSuffix(day) }}
-          <button class="refresh-button" (click)="getMeetings()">
+          <button type="button" class="refresh-button" (click)="getMeetings()" aria-label="Refresh meetings">
             <span>&#x21bb;</span>
           </button>
         </div>
@@ -100,9 +100,8 @@
           <div class="meeting" *ngFor="let meeting of getMeetingsForDay(day)"
                (click)="editMeetingPopup(meeting)"
                [ngStyle]="{'background-color': getShadeForMeeting(meeting), 'height.px': getMeetingHeight(meeting.startTime, meeting.endTime, true)}">
-            {{ meeting.person }}: {{ meeting.title }}
-            <br/>
-            {{meeting.startTime}} - {{meeting.endTime}}
+            <span class="meeting-primary">{{ meeting.person }}: {{ meeting.title }}</span>
+            <span class="meeting-secondary">{{meeting.startTime}} - {{meeting.endTime}}</span>
           </div>
         </div>
       </div>

@@ -2,14 +2,14 @@
   <div class="popup">
     <div class="popup-content" (click)="$event.stopPropagation()">
       <div class="popup-header">
-        <span class="popup-close" (click)="closePopup()">&times;</span>
         <h2>Delete Schedule</h2>
+        <button type="button" class="popup-close" (click)="closePopup()" aria-label="Close dialog">&times;</button>
       </div>
       <div class="popup-body">
-        <div>
+        <p class="message">
           Deleting {{meeting.title}} for {{meeting.person}} at {{meeting.date}} will be permanent. Do you want to continue?
-        </div>
-        <div>
+        </p>
+        <div class="actions">
           <button class="white" (click)="closePopup()">Cancel</button>
           <button class="blue" (click)="closePopup(true)">Confirm</button>
         </div>

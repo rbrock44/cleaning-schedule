@@ -4,7 +4,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(16, 21, 31, 0.46);
+  backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,13 +14,12 @@
 
 .popup {
   position: relative;
-  width: 400px; /* Keep desktop size intact */
-  max-width: 90%; /* Allow scaling on smaller screens */
-  padding: 20px;
-  background-color: white;
-  border: 1px solid #000;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: min(520px, 94vw);
+  padding: 1rem;
+  background-color: #ffffff;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-3);
 }
 
 .popup-content {
@@ -28,129 +28,156 @@
 
 .popup-header {
   display: flex;
-  align-items: center;
-  border-bottom: 1px solid #e5e5e5;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.65rem;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.8rem;
 }
 
 .popup-close {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 999px;
+  background: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
-  font-size: 24px;
-  margin-right: 12px;
-  color: #000;
+  font-size: 1.3rem;
+  line-height: 1;
 }
 
 .popup-body {
-  font-size: 16px;
+  font-size: 0.93rem;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 0.8rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
 }
 
 label {
   display: block;
-  margin-bottom: 5px;
-  font-size: 14px;
+  margin-bottom: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 input[type="text"],
 input[type="date"],
 input[type="time"] {
   width: 100%;
-  padding: 10px;
-  font-size: 14px;
+  min-height: 44px;
+  padding: 0.6rem 0.7rem;
+  font-size: 0.92rem;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-small);
+  background-color: #ffffff;
+  color: var(--md-sys-color-on-surface);
   box-sizing: border-box;
 }
 
-button[type="submit"],
+input[type="text"]:focus-visible,
+input[type="date"]:focus-visible,
+input[type="time"]:focus-visible {
+  outline: none;
+  border-color: var(--md-sys-color-primary);
+  box-shadow: 0 0 0 3px rgba(49, 93, 168, 0.16);
+}
+
+button.primary,
 button.delete {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
+  min-height: 40px;
+  padding: 0.55rem 1rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 999px;
+  font-weight: 700;
   cursor: pointer;
 }
 
-button[type="submit"]:disabled {
-  background-color: #ccc;
+button.primary {
+  color: var(--md-sys-color-on-primary);
+  background: var(--md-sys-color-primary);
+  box-shadow: var(--md-sys-elevation-1);
+}
+
+button.primary:disabled {
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface-variant);
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 button.delete {
-  background-color: #f44336; /* Distinct color for delete */
+  color: var(--md-sys-color-error);
+  background: color-mix(in srgb, var(--md-sys-color-error) 10%, #ffffff 90%);
+  border: 1px solid color-mix(in srgb, var(--md-sys-color-error) 30%, #ffffff 70%);
 }
 
 .meeting-buttons {
   display: flex;
-  justify-content: space-between;
-  gap: 10px; /* Add spacing between buttons */
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.autocomplete-group {
+  position: relative;
 }
 
 .autocomplete-list {
   list-style-type: none;
   margin: 0;
-  padding: 0;
-  border: 1px solid #ccc;
+  padding: 0.3rem;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-small);
   max-height: 150px;
   overflow-y: auto;
   position: absolute;
   background-color: white;
   width: 100%;
   z-index: 1000;
+  box-shadow: var(--md-sys-elevation-2);
 }
 
 .autocomplete-list li {
-  padding: 8px;
+  padding: 0.5rem;
+  border-radius: var(--md-sys-shape-corner-small);
   cursor: pointer;
 }
 
 .autocomplete-list li:hover {
-  background-color: #f0f0f0;
+  background-color: var(--md-sys-color-surface-container);
 }
 
-/* MOBILE-SPECIFIC STYLES */
 @media (max-width: 768px) {
   .popup {
-    width: 100%; /* Full width for smaller screens */
-    max-width: 95%; /* Add slight padding for edge space */
-    padding: 15px; /* Reduce padding to save space */
+    width: min(520px, 95vw);
+    padding: 0.8rem;
   }
 
-  .popup-header {
-    display: ruby;
-    gap: 10px; /* Add space between elements */
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 
   .popup-header h2 {
-    font-size: 18px; /* Adjust title font size */
-  }
-
-  .popup-close {
-    align-self: flex-end; /* Move close button to the right */
-  }
-
-  .popup-body {
-    font-size: 14px; /* Smaller font for mobile readability */
-  }
-
-  input[type="text"],
-  input[type="date"],
-  input[type="time"] {
-    font-size: 14px;
-    padding: 8px;
-  }
-
-  button[type="submit"],
-  button.delete {
-    width: 100%; /* Buttons take full width on small screens */
-    margin-top: 10px; /* Add spacing between buttons */
+    font-size: 1.1rem;
   }
 
   .meeting-buttons {
-    flex-direction: column; /* Stack buttons vertically */
-    align-items: stretch;
+    justify-content: stretch;
+  }
+
+  button.primary,
+  button.delete {
+    width: 100%;
   }
 }

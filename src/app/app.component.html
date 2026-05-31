@@ -1,9 +1,14 @@
-<main>
-  <div class="title-container">
+<main class="app-shell">
+  <header class="app-header">
+    <p class="eyebrow">Scheduler</p>
     <h1>Cleaning Schedule</h1>
-  </div>
+    <p class="subtitle">Plan weekly coverage with a clean Material-inspired calendar view.</p>
+  </header>
+
+  <section class="content-surface">
+    <app-schedule></app-schedule>
+  </section>
 </main>
-<app-schedule></app-schedule>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
@@ -14,4 +19,4 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
 
-<router-outlet />
+<router-outlet></router-outlet>

@@ -262,12 +262,12 @@ export class ScheduleComponent implements OnInit {
       {id: undefined, date: '2024-08-28', startTime: '09:30', endTime: '10:30', title: 'Sprint Planning', person: 'Mitchelle'},
     ];
 
-    const apiMeetings = await getAllMeetings();
+    // const apiMeetings = await getAllMeetings();
 
     this.allMeetings = [
       // HELPFUL: add fake meetings if running locally and need to see some
-      // ...fakeMeetings,
-      ...apiMeetings
+      ...fakeMeetings,
+      // ...apiMeetings
     ];
 
     this.filterMeetings();
