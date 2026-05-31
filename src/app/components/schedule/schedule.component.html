@@ -101,7 +101,7 @@
                (click)="editMeetingPopup(meeting)"
                [ngStyle]="{'background-color': getShadeForMeeting(meeting), 'height.px': getMeetingHeight(meeting.startTime, meeting.endTime, true)}">
             <span class="meeting-primary">{{ meeting.person }}: {{ meeting.title }}</span>
-            <span class="meeting-secondary">{{meeting.startTime}} - {{meeting.endTime}}</span>
+            <span class="meeting-secondary">{{ formatMeetingTimeRange(meeting.startTime, meeting.endTime) }}</span>
           </div>
         </div>
       </div>

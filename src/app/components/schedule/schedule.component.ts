@@ -190,15 +190,38 @@ export class ScheduleComponent implements OnInit {
     const [endHours, endMinutes] = endTime.split(':').map(Number);
     const startTotalMinutes: number = (startHours * 60) + startMinutes;
     const endTotalMinutes: number = (endHours * 60) + endMinutes;
+    const durationMinutes = Math.max(0, endTotalMinutes - startTotalMinutes);
 
     if (isMobile) {
-      const value = endTotalMinutes - startTotalMinutes;
-      if (value < 35) {
-        return 35;
-      }
+      const mobilePixelsPerMinute = 0.4;
+      const mobileMinHeight = 44;
+      const mobileMaxHeight = 112;
+
+      const scaledMobileHeight = Math.round(durationMinutes * mobilePixelsPerMinute);
+      return Math.min(mobileMaxHeight, Math.max(mobileMinHeight, scaledMobileHeight));
     }
 
-    return endTotalMinutes - startTotalMinutes;
+    return durationMinutes;
+  }
+
+  formatTimeForDisplay(time: string): string {
+    const [hoursPart, minutesPart] = time.split(':');
+    const hours = Number(hoursPart);
+    const minutes = Number(minutesPart);
+
+    if (Number.isNaN(hours) || Number.isNaN(minutes)) {
+      return time;
+    }
+
+    const suffix = hours >= 12 ? 'PM' : 'AM';
+    const twelveHour = ((hours + 11) % 12) + 1;
+    const paddedMinutes = minutes.toString().padStart(2, '0');
+
+    return `${twelveHour}:${paddedMinutes} ${suffix}`;
+  }
+
+  formatMeetingTimeRange(startTime: string, endTime: string): string {
+    return `${this.formatTimeForDisplay(startTime)} - ${this.formatTimeForDisplay(endTime)}`;
   }
 
   backwardArrowClick(): void {
@@ -258,8 +281,8 @@ export class ScheduleComponent implements OnInit {
       {id: undefined, date: '2024-08-22', startTime: '13:00', endTime: '14:00', title: 'Project Update', person: 'Mitchelle'},
       {id: undefined, date: '2024-08-23', startTime: '12:00', endTime: '13:00', title: 'Lunch Meeting', person: 'Addie'},
       {id: undefined, date: '2024-08-26', startTime: '09:30', endTime: '10:00', title: 'Project Update', person: 'Mitchelle'},
-      {id: undefined, date: '2024-08-27', startTime: '11:00', endTime: '12:00', title: 'Product Review', person: 'Addie'},
-      {id: undefined, date: '2024-08-28', startTime: '09:30', endTime: '10:30', title: 'Sprint Planning', person: 'Mitchelle'},
+      {id: undefined, date: '2026-05-29', startTime: '11:00', endTime: '12:00', title: 'Product Review', person: 'Addie'},
+      {id: undefined, date: '2026-05-28', startTime: '09:30', endTime: '12:30', title: 'Sprint Planning', person: 'Mitchelle'},
     ];
 
     // const apiMeetings = await getAllMeetings();
