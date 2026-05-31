@@ -183,6 +183,8 @@ button.delete {
 @media (max-width: 768px) {
   .popup-container {
     align-items: flex-start;
+    height: 100dvh;
+    height: 100svh;
     padding-top: max(0.6rem, env(safe-area-inset-top));
     padding-right: max(0.6rem, env(safe-area-inset-right));
     padding-bottom: max(0.6rem, env(safe-area-inset-bottom));
@@ -193,11 +195,13 @@ button.delete {
     width: 100%;
     padding: 0.8rem;
     border-radius: var(--md-sys-shape-corner-medium);
-    max-height: calc(100dvh - 1.2rem);
+    max-height: calc(100dvh - max(0.6rem, env(safe-area-inset-top)) - max(0.6rem, env(safe-area-inset-bottom)) - 0.6rem);
+    max-height: calc(100svh - max(0.6rem, env(safe-area-inset-top)) - max(0.6rem, env(safe-area-inset-bottom)) - 0.6rem);
   }
 
   .popup-body {
-    max-height: calc(100dvh - 8.8rem);
+    max-height: calc(100dvh - max(0.6rem, env(safe-area-inset-top)) - max(0.6rem, env(safe-area-inset-bottom)) - 8.4rem);
+    max-height: calc(100svh - max(0.6rem, env(safe-area-inset-top)) - max(0.6rem, env(safe-area-inset-bottom)) - 8.4rem);
   }
 
   .form-row {
