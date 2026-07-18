@@ -4,14 +4,13 @@ import { Meeting } from '../../type/meeting.type';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-confirmation-popup',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-  ],
-  templateUrl: './confirmation-popup.component.html',
-  styleUrl: './confirmation-popup.component.scss'
+    selector: 'app-confirmation-popup',
+    imports: [
+        CommonModule,
+        FormsModule,
+    ],
+    templateUrl: './confirmation-popup.component.html',
+    styleUrl: './confirmation-popup.component.scss'
 })
 export class ConfirmationPopupComponent {
   @Output() confirmed = new EventEmitter<boolean>()

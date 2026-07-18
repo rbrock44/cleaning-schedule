@@ -15,15 +15,14 @@ import {
 import {addMeeting, deleteMeeting, editMeeting, getAllMeetings} from "../../services/meetingService";
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MeetingPopupComponent,
-  ],
-  selector: 'app-schedule',
-  templateUrl: './schedule.component.html',
-  styleUrls: ['./schedule.component.scss']
+    imports: [
+        CommonModule,
+        FormsModule,
+        MeetingPopupComponent,
+    ],
+    selector: 'app-schedule',
+    templateUrl: './schedule.component.html',
+    styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
   @ViewChild('meetingPopup') meetingPopup!: MeetingPopupComponent;

@@ -6,15 +6,14 @@ import {ConfirmationPopupComponent} from "../confirmation-popup/confirmation-pop
 import {deleteMeeting} from "../../services/meetingService";
 
 @Component({
-  selector: 'app-meeting-popup',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ConfirmationPopupComponent,
-  ],
-  templateUrl: './meeting-popup.component.html',
-  styleUrl: './meeting-popup.component.scss'
+    selector: 'app-meeting-popup',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ConfirmationPopupComponent,
+    ],
+    templateUrl: './meeting-popup.component.html',
+    styleUrl: './meeting-popup.component.scss'
 })
 export class MeetingPopupComponent {
   @ViewChild('confirmationPopup') confirmationPopup!: ConfirmationPopupComponent;
