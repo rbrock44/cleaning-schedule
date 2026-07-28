@@ -1,9 +1,51 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
 :root {
-	color-scheme: light;
+	/* Dark is the default theme; :root[data-theme="light"] below overrides it. */
+	color-scheme: dark;
 
 	/* Material 3-inspired design tokens */
+	--md-sys-color-primary: #aac7ff;
+	--md-sys-color-on-primary: #002f68;
+	--md-sys-color-primary-container: #24487e;
+	--md-sys-color-on-primary-container: #d8e2ff;
+
+	--md-sys-color-secondary: #bcc7dc;
+	--md-sys-color-on-secondary: #26374c;
+	--md-sys-color-secondary-container: #3c4b64;
+	--md-sys-color-on-secondary-container: #d8e2ff;
+
+	--md-sys-color-surface: #10141c;
+	--md-sys-color-surface-container-low: #171d29;
+	--md-sys-color-surface-container: #1b2330;
+	--md-sys-color-surface-container-high: #232c3a;
+	--md-sys-color-surface-container-highest: #2c3646;
+	--md-sys-color-surface-variant: #43474e;
+	--md-sys-color-on-surface: #e6e8ef;
+	--md-sys-color-on-surface-variant: #bcc1cc;
+	--md-sys-color-outline: #8b929d;
+	--md-sys-color-outline-variant: #3c4350;
+
+	--md-sys-color-error: #ffb4ab;
+	--md-sys-color-on-error: #690005;
+
+	--md-sys-shape-corner-extra-small: 4px;
+	--md-sys-shape-corner-small: 8px;
+	--md-sys-shape-corner-medium: 12px;
+	--md-sys-shape-corner-large: 20px;
+	--md-sys-shape-corner-extra-large: 28px;
+
+	--md-sys-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.35);
+	--md-sys-elevation-2: 0 2px 4px rgba(0, 0, 0, 0.5), 0 8px 16px rgba(0, 0, 0, 0.35);
+	--md-sys-elevation-3: 0 4px 8px rgba(0, 0, 0, 0.55), 0 12px 24px rgba(0, 0, 0, 0.4);
+
+	--md-sys-glow-1: rgba(120, 163, 255, 0.16);
+	--md-sys-glow-2: rgba(140, 170, 255, 0.1);
+}
+
+:root[data-theme='light'] {
+	color-scheme: light;
+
 	--md-sys-color-primary: #315da8;
 	--md-sys-color-on-primary: #ffffff;
 	--md-sys-color-primary-container: #d9e2ff;
@@ -15,6 +57,7 @@
 	--md-sys-color-on-secondary-container: #091c38;
 
 	--md-sys-color-surface: #f9f9ff;
+	--md-sys-color-surface-container-low: #ffffff;
 	--md-sys-color-surface-container: #eceff8;
 	--md-sys-color-surface-container-high: #e4e8f2;
 	--md-sys-color-surface-container-highest: #dce1eb;
@@ -27,15 +70,12 @@
 	--md-sys-color-error: #ba1a1a;
 	--md-sys-color-on-error: #ffffff;
 
-	--md-sys-shape-corner-extra-small: 4px;
-	--md-sys-shape-corner-small: 8px;
-	--md-sys-shape-corner-medium: 12px;
-	--md-sys-shape-corner-large: 20px;
-	--md-sys-shape-corner-extra-large: 28px;
-
 	--md-sys-elevation-1: 0 1px 2px rgba(14, 18, 27, 0.12), 0 2px 6px rgba(14, 18, 27, 0.08);
 	--md-sys-elevation-2: 0 2px 4px rgba(14, 18, 27, 0.12), 0 8px 16px rgba(14, 18, 27, 0.08);
 	--md-sys-elevation-3: 0 4px 8px rgba(14, 18, 27, 0.12), 0 12px 24px rgba(14, 18, 27, 0.1);
+
+	--md-sys-glow-1: rgba(49, 93, 168, 0.1);
+	--md-sys-glow-2: rgba(79, 96, 127, 0.14);
 }
 
 * {
@@ -52,8 +92,8 @@ body {
 	font-family: 'Manrope', 'Segoe UI', sans-serif;
 	color: var(--md-sys-color-on-surface);
 	background:
-		radial-gradient(circle at 5% 0%, rgba(49, 93, 168, 0.1) 0%, rgba(49, 93, 168, 0) 50%),
-		radial-gradient(circle at 95% 8%, rgba(79, 96, 127, 0.14) 0%, rgba(79, 96, 127, 0) 45%),
+		radial-gradient(circle at 5% 0%, var(--md-sys-glow-1) 0%, rgba(0, 0, 0, 0) 50%),
+		radial-gradient(circle at 95% 8%, var(--md-sys-glow-2) 0%, rgba(0, 0, 0, 0) 45%),
 		var(--md-sys-color-surface);
 }
 
@@ -73,4 +113,35 @@ input,
 select,
 textarea {
 	font: inherit;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	body,
+	.popup,
+	.content-surface,
+	.arrow-container,
+	.day-column,
+	.day-column-horizontal,
+	.day-header,
+	select,
+	input[type='text'],
+	input[type='date'],
+	input[type='time'],
+	.autocomplete-list {
+		transition: background-color 220ms ease, border-color 220ms ease, color 220ms ease;
+	}
+}
+
+/* Theme toggle icon swap — lives here (not app.component.scss) because Angular's
+   emulated view encapsulation cannot target :root from a component stylesheet. */
+.theme-toggle .icon-moon {
+	display: none;
+}
+
+:root[data-theme='light'] .theme-toggle .icon-sun {
+	display: none;
+}
+
+:root[data-theme='light'] .theme-toggle .icon-moon {
+	display: block;
 }

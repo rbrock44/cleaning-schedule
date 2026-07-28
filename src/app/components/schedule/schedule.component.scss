@@ -19,7 +19,7 @@ select {
   border-radius: var(--md-sys-shape-corner-medium);
   border: 1px solid var(--md-sys-color-outline-variant);
   color: var(--md-sys-color-on-surface);
-  background-color: #ffffff;
+  background-color: var(--md-sys-color-surface-container-low);
   padding: 0.5rem 0.8rem;
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
@@ -78,7 +78,7 @@ select:focus-visible {
   width: 100%;
   background: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
-  border: 1px solid color-mix(in srgb, var(--md-sys-color-primary) 30%, #ffffff 70%);
+  border: 1px solid color-mix(in srgb, var(--md-sys-color-primary) 30%, var(--md-sys-color-surface) 70%);
   border-radius: var(--md-sys-shape-corner-medium);
   text-align: center;
   font-weight: 700;
@@ -117,7 +117,7 @@ select:focus-visible {
   position: relative;
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-medium);
-  background: #ffffff;
+  background: var(--md-sys-color-surface-container-low);
   overflow: hidden;
 }
 
@@ -136,7 +136,7 @@ select:focus-visible {
 }
 
 .time-slot {
-  border-bottom: 1px dashed color-mix(in srgb, var(--md-sys-color-outline-variant) 68%, #ffffff 32%);
+  border-bottom: 1px dashed color-mix(in srgb, var(--md-sys-color-outline-variant) 68%, var(--md-sys-color-surface) 32%);
   min-height: 30px;
   height: 30px;
   position: relative;
@@ -169,7 +169,8 @@ select:focus-visible {
   display: grid;
   align-content: center;
   padding: 0.2rem 0.35rem;
-  color: var(--md-sys-color-on-surface);
+  /* Meeting chips are always a light pastel regardless of theme, so their text stays a fixed dark shade rather than the theme-flipping on-surface token. */
+  color: #1a1c20;
   background-color: #d9e2ff;
 }
 
@@ -203,7 +204,7 @@ select:focus-visible {
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-medium);
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: var(--md-sys-color-surface-container-low);
 }
 
 .day-column-horizontal .meetings-container {

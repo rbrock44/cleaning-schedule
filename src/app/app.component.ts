@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ScheduleComponent } from './components/schedule/schedule.component';
+import { ThemeService } from './services/theme.service';
 
 @Component({
     selector: 'app-root',
@@ -13,4 +14,5 @@ import { ScheduleComponent } from './components/schedule/schedule.component';
 })
 export class AppComponent {
   title = 'cleaning-schedule';
+  protected themeService = inject(ThemeService);
 }

@@ -1,8 +1,37 @@
 <main class="app-shell">
   <header class="app-header">
-    <!-- <p class="eyebrow">Scheduler</p> -->
-    <h1>Cleaning Schedule</h1>
-    <!-- <p class="subtitle">Plan weekly coverage with a clean Material-inspired calendar view.</p> -->
+    <div class="header-row">
+      <!-- <p class="eyebrow">Scheduler</p> -->
+      <h1>Cleaning Schedule</h1>
+      <!-- <p class="subtitle">Plan weekly coverage with a clean Material-inspired calendar view.</p> -->
+      <button
+        type="button"
+        class="theme-toggle"
+        (click)="themeService.toggle()"
+        [attr.aria-pressed]="themeService.theme() === 'dark'"
+        [attr.aria-label]="themeService.theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+      >
+        <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2" fill="currentColor" />
+          <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <line x1="12" y1="2.5" x2="12" y2="5" />
+            <line x1="12" y1="19" x2="12" y2="21.5" />
+            <line x1="2.5" y1="12" x2="5" y2="12" />
+            <line x1="19" y1="12" x2="21.5" y2="12" />
+            <line x1="5.1" y1="5.1" x2="6.9" y2="6.9" />
+            <line x1="17.1" y1="17.1" x2="18.9" y2="18.9" />
+            <line x1="5.1" y1="18.9" x2="6.9" y2="17.1" />
+            <line x1="17.1" y1="6.9" x2="18.9" y2="5.1" />
+          </g>
+        </svg>
+        <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M20.8 14.5A8.5 8.5 0 1 1 9.5 3.2a7 7 0 0 0 11.3 11.3z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </div>
   </header>
 
   <section class="content-surface">

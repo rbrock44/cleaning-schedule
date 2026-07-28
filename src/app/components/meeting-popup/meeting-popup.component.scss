@@ -21,7 +21,7 @@
   position: relative;
   width: min(520px, 100%);
   padding: 1rem;
-  background-color: #ffffff;
+  background-color: var(--md-sys-color-surface-container-low);
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-large);
   box-shadow: var(--md-sys-elevation-3);
@@ -89,7 +89,7 @@ input[type="time"] {
   font-size: 0.92rem;
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-small);
-  background-color: #ffffff;
+  background-color: var(--md-sys-color-surface-container-low);
   color: var(--md-sys-color-on-surface);
   box-sizing: border-box;
 }
@@ -127,8 +127,8 @@ button.primary:disabled {
 
 button.delete {
   color: var(--md-sys-color-error);
-  background: color-mix(in srgb, var(--md-sys-color-error) 10%, #ffffff 90%);
-  border: 1px solid color-mix(in srgb, var(--md-sys-color-error) 30%, #ffffff 70%);
+  background: color-mix(in srgb, var(--md-sys-color-error) 10%, var(--md-sys-color-surface-container-low) 90%);
+  border: 1px solid color-mix(in srgb, var(--md-sys-color-error) 30%, var(--md-sys-color-surface-container-low) 70%);
 }
 
 .meeting-buttons {
@@ -165,7 +165,7 @@ button.delete {
   max-height: 150px;
   overflow-y: auto;
   position: absolute;
-  background-color: white;
+  background-color: var(--md-sys-color-surface-container-low);
   width: 100%;
   z-index: 1000;
   box-shadow: var(--md-sys-elevation-2);
