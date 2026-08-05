@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
-import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 import { Meeting } from '../../type/meeting.type';
 import { FormsModule } from '@angular/forms';
 import {ConfirmationPopupComponent} from "../confirmation-popup/confirmation-popup.component";
 import {deleteMeeting} from "../../services/meetingService";
+
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 @Component({
     selector: 'app-meeting-popup',
@@ -17,6 +20,9 @@ import {deleteMeeting} from "../../services/meetingService";
 })
 export class MeetingPopupComponent {
   @ViewChild('confirmationPopup') confirmationPopup!: ConfirmationPopupComponent;
+  @ViewChild('popupPanel') popupPanel?: ElementRef<HTMLElement>;
+
+  private previouslyFocusedElement: HTMLElement | null = null;
 
   @Output() addMeeting = new EventEmitter<Meeting>()
   @Output() editMeeting = new EventEmitter<Meeting>()
@@ -47,6 +53,7 @@ export class MeetingPopupComponent {
     };
     this.isEdit = false;
     this.showPopup = true;
+    this.captureFocusAndOpen();
   }
 
   openPopupEdit(meeting: Meeting, personOptions: string[]) {
@@ -57,11 +64,59 @@ export class MeetingPopupComponent {
     };
     this.isEdit = true;
     this.showPopup = true;
+    this.captureFocusAndOpen();
   }
 
   closePopup() {
     this.showPopup = false;
     this.resetForm();
+    this.restoreFocus();
+  }
+
+  private captureFocusAndOpen(): void {
+    this.previouslyFocusedElement = document.activeElement as HTMLElement | null;
+    setTimeout(() => {
+      const focusable = this.getFocusableElements();
+      if (focusable.length > 0) {
+        focusable[0].focus();
+      } else {
+        this.popupPanel?.nativeElement.focus();
+      }
+    });
+  }
+
+  private restoreFocus(): void {
+    this.previouslyFocusedElement?.focus();
+    this.previouslyFocusedElement = null;
+  }
+
+  private getFocusableElements(): HTMLElement[] {
+    if (!this.popupPanel) {
+      return [];
+    }
+    return Array.from(
+      this.popupPanel.nativeElement.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+    ).filter(el => !!el.offsetParent);
+  }
+
+  onTabKey(event: KeyboardEvent): void {
+    const focusable = this.getFocusableElements();
+    if (focusable.length === 0) {
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement;
+
+    if (event.shiftKey) {
+      if (active === first || !this.popupPanel?.nativeElement.contains(active)) {
+        event.preventDefault();
+        last.focus();
+      }
+    } else if (active === last) {
+      event.preventDefault();
+      first.focus();
+    }
   }
 
   onSubmit() {
