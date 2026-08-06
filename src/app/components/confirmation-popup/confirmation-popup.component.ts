@@ -61,7 +61,8 @@ export class ConfirmationPopupComponent {
     ).filter(el => !!el.offsetParent);
   }
 
-  onTabKey(event: KeyboardEvent): void {
+  onTabKey(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
     const focusable = this.getFocusableElements();
     if (focusable.length === 0) {
       return;
@@ -70,7 +71,7 @@ export class ConfirmationPopupComponent {
     const last = focusable[focusable.length - 1];
     const active = document.activeElement;
 
-    if (event.shiftKey) {
+    if (keyboardEvent.shiftKey) {
       if (active === first || !this.popupPanel?.nativeElement.contains(active)) {
         event.preventDefault();
         last.focus();
