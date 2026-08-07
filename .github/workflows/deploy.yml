@@ -30,6 +30,12 @@ jobs:
     - name: Build Project
       run: npm run deploy
 
+    - name: Write runtime app config
+      env:
+        CLEANING_SCHEDULE_API_KEY: ${{ secrets.CLEANING_SCHEDULE_API_KEY }}
+      run: |
+        node -e "const fs=require('fs'); const key=(process.env.CLEANING_SCHEDULE_API_KEY||'').trim(); if(!key){throw new Error('Missing required secret: CLEANING_SCHEDULE_API_KEY');} const config={apiKey:key}; fs.writeFileSync('./dist/cleaning-schedule/browser/app-config.js', 'window.__APP_CONFIG__ = ' + JSON.stringify(config, null, 2) + ';\n');"
+
     - name: Add CNAME
       run: |
         cp CNAME ./dist/cleaning-schedule/browser/CNAME

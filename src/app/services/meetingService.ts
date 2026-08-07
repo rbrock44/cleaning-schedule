@@ -1,6 +1,19 @@
 import {Meeting} from "../type/meeting.type";
 
+declare global {
+  interface Window {
+    __APP_CONFIG__?: { apiKey?: string };
+  }
+}
+
 const baseUrl = 'https://home-page-api.ryan-brock.com/cleaning-schedule';
+
+function writeHeaders(): HeadersInit {
+  return {
+    'Content-Type': 'application/json',
+    'X-API-Key': window.__APP_CONFIG__?.apiKey ?? '',
+  };
+}
 
 export async function getMeetingsByWeek(startOfWeek: string): Promise<Meeting[]> {
   const apiUrl = baseUrl + `/week?startDate=${startOfWeek}`;
@@ -35,9 +48,7 @@ export async function editMeeting(meeting: Meeting): Promise<boolean> {
 
   const response = await fetch(apiUrl, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: writeHeaders(),
     cache: 'no-store',
     body: JSON.stringify(meeting)
   });
@@ -50,9 +61,7 @@ export async function addMeeting(meeting: Meeting): Promise<boolean> {
 
   const response = await fetch(apiUrl, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: writeHeaders(),
     cache: 'no-store',
     body: JSON.stringify(meeting)
   });
@@ -65,9 +74,7 @@ export async function deleteMeeting(id: number): Promise<boolean> {
 
   const response = await fetch(apiUrl, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: writeHeaders(),
     cache: 'no-store',
   });
 
