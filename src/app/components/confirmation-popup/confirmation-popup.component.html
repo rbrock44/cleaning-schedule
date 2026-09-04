@@ -1,4 +1,4 @@
-@if (showPopup) {
+@if (showPopup()) {
   <div class="popup-container" (click)="closePopup()" (keydown.escape)="closePopup()">
     <div class="popup" role="dialog" aria-modal="true" aria-labelledby="confirmationPopupTitle" tabindex="-1" #popupPanel (keydown.tab)="onTabKey($event)">
       <div class="popup-content" (click)="$event.stopPropagation()">

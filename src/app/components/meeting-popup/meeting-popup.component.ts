@@ -1,5 +1,5 @@
 
-import {Component, ElementRef, EventEmitter, Output, ViewChild, ChangeDetectionStrategy} from '@angular/core';
+import {Component, ElementRef, ChangeDetectionStrategy, output, signal, viewChild} from '@angular/core';
 import { Meeting } from '../../type/meeting.type';
 import { FormsModule } from '@angular/forms';
 import {ConfirmationPopupComponent} from "../confirmation-popup/confirmation-popup.component";
@@ -19,14 +19,14 @@ const FOCUSABLE_SELECTOR =
     styleUrl: './meeting-popup.component.scss'
 })
 export class MeetingPopupComponent {
-  @ViewChild('confirmationPopup') confirmationPopup!: ConfirmationPopupComponent;
-  @ViewChild('popupPanel') popupPanel?: ElementRef<HTMLElement>;
+  readonly confirmationPopup = viewChild.required<ConfirmationPopupComponent>('confirmationPopup');
+  readonly popupPanel = viewChild<ElementRef<HTMLElement>>('popupPanel');
 
   private previouslyFocusedElement: HTMLElement | null = null;
 
-  @Output() addMeeting = new EventEmitter<Meeting>()
-  @Output() editMeeting = new EventEmitter<Meeting>()
-  @Output() deleteMeeting = new EventEmitter<Meeting>()
+  readonly addMeeting = output<Meeting>();
+  readonly editMeeting = output<Meeting>();
+  readonly deleteMeeting = output<Meeting>();
   blankMeeting: Meeting = {
     id: undefined,
     date: '',
@@ -37,12 +37,12 @@ export class MeetingPopupComponent {
     hasBeenPaid: false
   };
 
-  showPopup: boolean = false;
-  isEdit: boolean = true;
+  readonly showPopup = signal(false);
+  readonly isEdit = signal(true);
   personOptions: string[] = [];
-  filteredPeople: string[] = [];
+  readonly filteredPeople = signal<string[]>([]);
   meeting: Meeting = structuredClone(this.blankMeeting);
-  showAutocomplete = false;
+  readonly showAutocomplete = signal(false);
 
   openPopupCreate(defaultDay: string, personOptions: string[]) {
     this.personOptions = personOptions
@@ -51,8 +51,8 @@ export class MeetingPopupComponent {
       date: defaultDay,
       person: 'Addie'
     };
-    this.isEdit = false;
-    this.showPopup = true;
+    this.isEdit.set(false);
+    this.showPopup.set(true);
     this.captureFocusAndOpen();
   }
 
@@ -62,13 +62,13 @@ export class MeetingPopupComponent {
       ...structuredClone(meeting),
       hasBeenPaid: !!meeting.hasBeenPaid,
     };
-    this.isEdit = true;
-    this.showPopup = true;
+    this.isEdit.set(true);
+    this.showPopup.set(true);
     this.captureFocusAndOpen();
   }
 
   closePopup() {
-    this.showPopup = false;
+    this.showPopup.set(false);
     this.resetForm();
     this.restoreFocus();
   }
@@ -80,7 +80,7 @@ export class MeetingPopupComponent {
       if (focusable.length > 0) {
         focusable[0].focus();
       } else {
-        this.popupPanel?.nativeElement.focus();
+        this.popupPanel()?.nativeElement.focus();
       }
     });
   }
@@ -91,11 +91,12 @@ export class MeetingPopupComponent {
   }
 
   private getFocusableElements(): HTMLElement[] {
-    if (!this.popupPanel) {
+    const popupPanel = this.popupPanel();
+    if (!popupPanel) {
       return [];
     }
     return Array.from(
-      this.popupPanel.nativeElement.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+      popupPanel.nativeElement.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
     ).filter(el => !!el.offsetParent);
   }
 
@@ -110,7 +111,7 @@ export class MeetingPopupComponent {
     const active = document.activeElement;
 
     if (keyboardEvent.shiftKey) {
-      if (active === first || !this.popupPanel?.nativeElement.contains(active)) {
+      if (active === first || !this.popupPanel()?.nativeElement.contains(active)) {
         event.preventDefault();
         last.focus();
       }
@@ -121,7 +122,7 @@ export class MeetingPopupComponent {
   }
 
   onSubmit() {
-    if (this.isEdit) {
+    if (this.isEdit()) {
       this.editMeeting.emit(this.meeting);
 
     } else {
@@ -136,20 +137,20 @@ export class MeetingPopupComponent {
 
   filterPeople() {
     const query = this.meeting.person.toLowerCase();
-    this.filteredPeople = this.personOptions.filter(person => person.toLowerCase().includes(query));
+    this.filteredPeople.set(this.personOptions.filter(person => person.toLowerCase().includes(query)));
   }
 
   selectPerson(person: string) {
     this.meeting.person = person;
-    this.filteredPeople = [];
+    this.filteredPeople.set([]);
   }
 
   showDropdown(): void {
-    this.showAutocomplete = true;
+    this.showAutocomplete.set(true);
   }
 
   hideDropdown(): void {
-    this.showAutocomplete = false;
+    this.showAutocomplete.set(false);
   }
 
   deleteMeetingLocal(confirmed: boolean): void {
@@ -159,6 +160,6 @@ export class MeetingPopupComponent {
   }
 
   confirmDeleteMeeting(): void {
-    this.confirmationPopup.openPopup(this.meeting);
+    this.confirmationPopup().openPopup(this.meeting);
   }
 }

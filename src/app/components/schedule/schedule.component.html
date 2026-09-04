@@ -1,4 +1,4 @@
-@if (!loading) {
+@if (!loading()) {
   <div class="schedule-shell">
     <div class="arrow-container">
       <button type="button" class="arrow-btn left-arrow" (click)="backwardArrowClick()" aria-label="Previous week">
@@ -37,7 +37,7 @@
 <!--      </div>-->
 <!--    </div>-->
 <!--  </div>-->
-@if (!isMobile) {
+@if (!isMobile()) {
   <div>
     <div>
       <div class="month-container">
@@ -81,7 +81,7 @@
     </div>
   </div>
 }
-@if (isMobile) {
+@if (isMobile()) {
   <div class="schedule-container mobile">
     <!-- Loop through the days, adding a month banner at the correct point -->
     @for (day of days; track day; let i = $index) {

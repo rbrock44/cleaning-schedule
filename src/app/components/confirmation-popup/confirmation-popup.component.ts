@@ -1,5 +1,5 @@
 
-import { Component, ElementRef, EventEmitter, Output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, ChangeDetectionStrategy, output, signal, viewChild } from '@angular/core';
 import { Meeting } from '../../type/meeting.type';
 import { FormsModule } from '@angular/forms';
 
@@ -16,10 +16,10 @@ const FOCUSABLE_SELECTOR =
     styleUrl: './confirmation-popup.component.scss'
 })
 export class ConfirmationPopupComponent {
-  @Output() confirmed = new EventEmitter<boolean>()
-  @ViewChild('popupPanel') popupPanel?: ElementRef<HTMLElement>;
+  readonly confirmed = output<boolean>();
+  readonly popupPanel = viewChild<ElementRef<HTMLElement>>('popupPanel');
 
-  showPopup: boolean = false;
+  readonly showPopup = signal(false);
   meeting: Meeting = {
       id: undefined,
       date: '',
@@ -33,31 +33,32 @@ export class ConfirmationPopupComponent {
 
   openPopup(meeting: Meeting) {
     this.meeting = meeting;
-    this.showPopup = true;
+    this.showPopup.set(true);
     this.previouslyFocusedElement = document.activeElement as HTMLElement | null;
     setTimeout(() => {
       const focusable = this.getFocusableElements();
       if (focusable.length > 0) {
         focusable[0].focus();
       } else {
-        this.popupPanel?.nativeElement.focus();
+        this.popupPanel()?.nativeElement.focus();
       }
     });
   }
 
   closePopup(confirmed: boolean = false) {
     this.confirmed.emit(confirmed);
-    this.showPopup = false;
+    this.showPopup.set(false);
     this.previouslyFocusedElement?.focus();
     this.previouslyFocusedElement = null;
   }
 
   private getFocusableElements(): HTMLElement[] {
-    if (!this.popupPanel) {
+    const popupPanel = this.popupPanel();
+    if (!popupPanel) {
       return [];
     }
     return Array.from(
-      this.popupPanel.nativeElement.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+      popupPanel.nativeElement.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
     ).filter(el => !!el.offsetParent);
   }
 
@@ -72,7 +73,7 @@ export class ConfirmationPopupComponent {
     const active = document.activeElement;
 
     if (keyboardEvent.shiftKey) {
-      if (active === first || !this.popupPanel?.nativeElement.contains(active)) {
+      if (active === first || !this.popupPanel()?.nativeElement.contains(active)) {
         event.preventDefault();
         last.focus();
       }

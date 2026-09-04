@@ -1,12 +1,12 @@
-@if (showPopup) {
+@if (showPopup()) {
   <div class="popup-container" (click)="closePopup()" (keydown.escape)="closePopup()">
     <div class="popup" role="dialog" aria-modal="true" aria-labelledby="meetingPopupTitle" tabindex="-1" #popupPanel (keydown.tab)="onTabKey($event)">
       <div class="popup-content" (click)="$event.stopPropagation()">
         <div class="popup-header">
-          @if (!isEdit) {
+          @if (!isEdit()) {
             <h2 id="meetingPopupTitle">Add to Schedule</h2>
           }
-          @if (isEdit) {
+          @if (isEdit()) {
             <h2 id="meetingPopupTitle">Edit Existing Schedule</h2>
           }
           <button type="button" class="popup-close" (click)="closePopup()" aria-label="Close dialog">&times;</button>
@@ -44,9 +44,9 @@
                 required
                 autocomplete="off"
                 >
-                @if (filteredPeople.length > 0 && showAutocomplete) {
+                @if (filteredPeople().length > 0 && showAutocomplete()) {
                   <ul class="autocomplete-list">
-                    @for (person of filteredPeople; track person) {
+                    @for (person of filteredPeople(); track person) {
                       <li (click)="selectPerson(person)">
                         {{ person }}
                       </li>
@@ -54,7 +54,7 @@
                   </ul>
                 }
               </div>
-              @if (isEdit) {
+              @if (isEdit()) {
                 <div class="hidden-checkbox-row">
                   <input
                     type="checkbox"
@@ -66,13 +66,13 @@
                   </div>
                 }
                 <div class="meeting-buttons">
-                  @if (!isEdit) {
+                  @if (!isEdit()) {
                     <button type="submit" class="primary" [disabled]="!meetingForm.form.valid">Create</button>
                   }
-                  @if (isEdit) {
+                  @if (isEdit()) {
                     <button type="submit" class="primary" [disabled]="!meetingForm.form.valid">Edit</button>
                   }
-                  @if (isEdit) {
+                  @if (isEdit()) {
                     <button type="button" class="delete" (click)="confirmDeleteMeeting()">Delete</button>
                   }
                 </div>

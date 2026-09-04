@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, HostListener, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
+import {Component, HostListener, OnInit, ChangeDetectionStrategy, signal, viewChild} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MeetingPopupComponent} from '../meeting-popup/meeting-popup.component';
 import {Meeting, TimeSlot} from '../../type/meeting.type';
@@ -46,12 +46,12 @@ import {addMeeting, deleteMeeting, editMeeting, getAllMeetings} from "../../serv
     styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
-  @ViewChild('meetingPopup') meetingPopup!: MeetingPopupComponent;
-  isMobile: boolean = (typeof window != 'undefined') && window.innerWidth <= 768;
+  readonly meetingPopup = viewChild.required<MeetingPopupComponent>('meetingPopup');
+  readonly isMobile = signal<boolean>((typeof window != 'undefined') && window.innerWidth <= 768);
 
   @HostListener('window:resize')
   onResize() {
-    this.isMobile = window.innerWidth <= 768;
+    this.isMobile.set(window.innerWidth <= 768);
   }
 
   defaultDropdownOption: string = 'All';
@@ -66,7 +66,7 @@ export class ScheduleComponent implements OnInit {
 
   people: People = {};
 
-  loading: boolean = false;
+  readonly loading = signal(false);
 
   ngOnInit() {
     this.days = generateDays(this.startDate);
@@ -75,11 +75,11 @@ export class ScheduleComponent implements OnInit {
   }
 
   async setup(): Promise<void> {
-    this.loading = true;
+    this.loading.set(true);
     await this.getMeetings();
     this.assignColors();
 
-    this.loading = false;
+    this.loading.set(false);
   }
 
   getMeetingsForDay(day: string) {
@@ -227,11 +227,11 @@ export class ScheduleComponent implements OnInit {
   }
 
   editMeetingPopup(meeting: Meeting): void {
-    this.meetingPopup.openPopupEdit(meeting, this.getDistinctSortedPeople());
+    this.meetingPopup().openPopupEdit(meeting, this.getDistinctSortedPeople());
   }
 
   addMeetingPopup(defaultDay: string): void {
-    this.meetingPopup.openPopupCreate(defaultDay, this.getDistinctSortedPeople());
+    this.meetingPopup().openPopupCreate(defaultDay, this.getDistinctSortedPeople());
   }
 
   getDistinctSortedPeople(): string[] {
