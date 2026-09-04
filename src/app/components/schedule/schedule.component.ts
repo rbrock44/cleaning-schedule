@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MeetingPopupComponent} from '../meeting-popup/meeting-popup.component';
 import {Meeting, TimeSlot} from '../../type/meeting.type';
@@ -42,6 +42,7 @@ import {addMeeting, deleteMeeting, editMeeting, getAllMeetings} from "../../serv
     ],
     selector: 'app-schedule',
     templateUrl: './schedule.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {

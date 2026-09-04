@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import {Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
+
+import {Component, ElementRef, EventEmitter, Output, ViewChild, ChangeDetectionStrategy} from '@angular/core';
 import { Meeting } from '../../type/meeting.type';
 import { FormsModule } from '@angular/forms';
 import {ConfirmationPopupComponent} from "../confirmation-popup/confirmation-popup.component";
@@ -11,11 +11,11 @@ const FOCUSABLE_SELECTOR =
 @Component({
     selector: 'app-meeting-popup',
     imports: [
-        CommonModule,
-        FormsModule,
-        ConfirmationPopupComponent,
-    ],
+    FormsModule,
+    ConfirmationPopupComponent
+],
     templateUrl: './meeting-popup.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './meeting-popup.component.scss'
 })
 export class MeetingPopupComponent {

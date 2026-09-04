@@ -1,26 +1,27 @@
-<div class="schedule-shell" *ngIf="!loading">
-  <div class="arrow-container">
-    <button type="button" class="arrow-btn left-arrow" (click)="backwardArrowClick()" aria-label="Previous week">
-      <span>&larr;</span>
-    </button>
-    <select [(ngModel)]="selectedValue" (change)="filterMeetings()" aria-label="Filter by person">
-      <option *ngFor="let option of personDropdownOptions" [value]="option">{{ option }}</option>
-    </select>
-    <button type="button" class="arrow-btn right-arrow" (click)="forwardArrowClick()" aria-label="Next week">
-      <span>&rarr;</span>
-    </button>
-  </div>
-
-
-<!--  <div class="schedule-container">-->
-<!--    <div class="day-column" *ngFor="let day of days">-->
-<!--      <div class="day-header">-->
-<!--        <button class="plus-button" (click)="addMeetingPopup(day)">-->
-<!--          <span>+</span>-->
-<!--        </button>-->
-<!--        {{ this.parseDayWithSuffix(day) }}-->
-<!--        <button class="refresh-button" (click)="getMeetings()">-->
-<!--          <span>&#x21bb;</span>-->
+@if (!loading) {
+  <div class="schedule-shell">
+    <div class="arrow-container">
+      <button type="button" class="arrow-btn left-arrow" (click)="backwardArrowClick()" aria-label="Previous week">
+        <span>&larr;</span>
+      </button>
+      <select [(ngModel)]="selectedValue" (change)="filterMeetings()" aria-label="Filter by person">
+        @for (option of personDropdownOptions; track option) {
+          <option [value]="option">{{ option }}</option>
+        }
+      </select>
+      <button type="button" class="arrow-btn right-arrow" (click)="forwardArrowClick()" aria-label="Next week">
+        <span>&rarr;</span>
+      </button>
+    </div>
+    <!--  <div class="schedule-container">-->
+    <!--    <div class="day-column" *ngFor="let day of days">-->
+    <!--      <div class="day-header">-->
+    <!--        <button class="plus-button" (click)="addMeetingPopup(day)">-->
+    <!--          <span>+</span>-->
+  <!--        </button>-->
+  <!--        {{ this.parseDayWithSuffix(day) }}-->
+  <!--        <button class="refresh-button" (click)="getMeetings()">-->
+  <!--          <span>&#x21bb;</span>-->
 <!--        </button>-->
 <!--      </div>-->
 <!--      <div class="time-slot" *ngFor="let slot of timeSlots; let i = index">-->
@@ -36,82 +37,92 @@
 <!--      </div>-->
 <!--    </div>-->
 <!--  </div>-->
-
-  <div *ngIf="!isMobile">
+@if (!isMobile) {
+  <div>
     <div>
       <div class="month-container">
         <div [ngClass]="getMonthBannerClassname(0)">{{ getFirstMonth() }}</div>
-        <div [ngClass]="getMonthBannerClassname(1)" *ngIf="hasSecondMonth()">{{ getSecondMonth() }}</div>
+        @if (hasSecondMonth()) {
+          <div [ngClass]="getMonthBannerClassname(1)">{{ getSecondMonth() }}</div>
+        }
       </div>
     </div>
-
     <!-- Desktop Layout -->
     <div class="schedule-container desktop" >
-
-
-      <div class="day-column" *ngFor="let day of days">
-        <div class="day-header">
-          <button type="button" class="plus-button" (click)="addMeetingPopup(day)" aria-label="Add meeting">
-            <span>+</span>
-          </button>
-          {{ parseDayWithSuffix(day) }}
-          <button type="button" class="refresh-button" (click)="getMeetings()" aria-label="Refresh meetings">
-            <span>&#x21bb;</span>
-          </button>
-        </div>
-        <div class="time-slot" *ngFor="let slot of timeSlots; let i = index">
-          <div class="slot-time">{{ slot.display }}</div>
-          <div class="meetings-container">
-            <div class="meetings">
-              <div class="meeting" *ngFor="let meeting of getMeetingsForTime(day, i)"
-                   (click)="editMeetingPopup(meeting)"
-                   [ngStyle]="{'background-color': getShadeForMeeting(meeting), 'height.px': getMeetingHeight(meeting.startTime, meeting.endTime)}">
-                <span class="meeting-primary">{{ meeting.person }}: {{ meeting.title }}</span>
+      @for (day of days; track day) {
+        <div class="day-column">
+          <div class="day-header">
+            <button type="button" class="plus-button" (click)="addMeetingPopup(day)" aria-label="Add meeting">
+              <span>+</span>
+            </button>
+            {{ parseDayWithSuffix(day) }}
+            <button type="button" class="refresh-button" (click)="getMeetings()" aria-label="Refresh meetings">
+              <span>&#x21bb;</span>
+            </button>
+          </div>
+          @for (slot of timeSlots; track slot; let i = $index) {
+            <div class="time-slot">
+              <div class="slot-time">{{ slot.display }}</div>
+              <div class="meetings-container">
+                <div class="meetings">
+                  @for (meeting of getMeetingsForTime(day, i); track meeting) {
+                    <div class="meeting"
+                      (click)="editMeetingPopup(meeting)"
+                      [ngStyle]="{'background-color': getShadeForMeeting(meeting), 'height.px': getMeetingHeight(meeting.startTime, meeting.endTime)}">
+                      <span class="meeting-primary">{{ meeting.person }}: {{ meeting.title }}</span>
+                    </div>
+                  }
+                </div>
               </div>
             </div>
-          </div>
+          }
         </div>
-      </div>
+      }
     </div>
-
   </div>
-
-
-  <div class="schedule-container mobile" *ngIf="isMobile">
+}
+@if (isMobile) {
+  <div class="schedule-container mobile">
     <!-- Loop through the days, adding a month banner at the correct point -->
-    <div *ngFor="let day of days; let i = index">
-      <!-- Add a month banner at the start of the list or when the month changes -->
-      <div *ngIf="i === 0 || isMonthChange(i)" class="month-banner">
-        {{ getMonthForDay(day) }}
-      </div>
-
-      <!-- Day Column -->
-      <div class="day-column-horizontal">
-        <div class="day-header">
-          <button type="button" class="plus-button" (click)="addMeetingPopup(day)" aria-label="Add meeting">
-            <span>+</span>
-          </button>
-          {{ parseDayWithSuffix(day) }}
-          <button type="button" class="refresh-button" (click)="getMeetings()" aria-label="Refresh meetings">
-            <span>&#x21bb;</span>
-          </button>
-        </div>
-        <div class="meetings-container">
-          <div class="meeting" *ngFor="let meeting of getMeetingsForDay(day)"
-               (click)="editMeetingPopup(meeting)"
-               [ngStyle]="{'background-color': getShadeForMeeting(meeting), 'height.px': getMeetingHeight(meeting.startTime, meeting.endTime, true)}">
-            <span class="meeting-primary">{{ meeting.person }}: {{ meeting.title }}</span>
-            <span class="meeting-secondary">{{ formatMeetingTimeRange(meeting.startTime, meeting.endTime) }}</span>
+    @for (day of days; track day; let i = $index) {
+      <div>
+        <!-- Add a month banner at the start of the list or when the month changes -->
+        @if (i === 0 || isMonthChange(i)) {
+          <div class="month-banner">
+            {{ getMonthForDay(day) }}
+          </div>
+        }
+        <!-- Day Column -->
+        <div class="day-column-horizontal">
+          <div class="day-header">
+            <button type="button" class="plus-button" (click)="addMeetingPopup(day)" aria-label="Add meeting">
+              <span>+</span>
+            </button>
+            {{ parseDayWithSuffix(day) }}
+            <button type="button" class="refresh-button" (click)="getMeetings()" aria-label="Refresh meetings">
+              <span>&#x21bb;</span>
+            </button>
+          </div>
+          <div class="meetings-container">
+            @for (meeting of getMeetingsForDay(day); track meeting) {
+              <div class="meeting"
+                (click)="editMeetingPopup(meeting)"
+                [ngStyle]="{'background-color': getShadeForMeeting(meeting), 'height.px': getMeetingHeight(meeting.startTime, meeting.endTime, true)}">
+                <span class="meeting-primary">{{ meeting.person }}: {{ meeting.title }}</span>
+                <span class="meeting-secondary">{{ formatMeetingTimeRange(meeting.startTime, meeting.endTime) }}</span>
+              </div>
+            }
           </div>
         </div>
       </div>
-    </div>
+    }
   </div>
-
-  <app-meeting-popup
-    #meetingPopup
-    (editMeeting)="editMeetingCall($event)"
-    (addMeeting)="addMeetingCall($event)"
-    (deleteMeeting)="deleteMeetingCall($event)"
+}
+<app-meeting-popup
+  #meetingPopup
+  (editMeeting)="editMeetingCall($event)"
+  (addMeeting)="addMeetingCall($event)"
+  (deleteMeeting)="deleteMeetingCall($event)"
   />
 </div>
+}

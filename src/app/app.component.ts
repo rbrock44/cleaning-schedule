@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { ThemeService } from './services/theme.service';
@@ -10,6 +10,7 @@ import { ThemeService } from './services/theme.service';
         ScheduleComponent
     ],
     templateUrl: './app.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './app.component.scss'
 })
 export class AppComponent {
