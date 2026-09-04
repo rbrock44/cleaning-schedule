@@ -3,8 +3,7 @@ import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MeetingPopupComponent} from '../meeting-popup/meeting-popup.component';
 import {Meeting, TimeSlot} from '../../type/meeting.type';
-import {People, Shades} from '../../type/person.type';
-import {getUniqueLightenedColor, getUniqueRandomColor} from '../../utility/color/color';
+import {People} from '../../type/person.type';
 import {
   formatMonthAndYear,
   generateDays,
@@ -12,6 +11,27 @@ import {
   getClosestMonday,
   getDayWithSuffix
 } from '../../utility/date/date';
+import {
+  assignColors,
+  buildPersonDropdownOptions,
+  filterMeetingsByPerson,
+  formatMeetingTimeRange,
+  formatTimeForDisplay,
+  getDistinctSortedPeople,
+  getFirstMonth,
+  getMeetingHeight,
+  getMeetingTop,
+  getMeetingsForDay,
+  getMeetingsForTime,
+  getMonth,
+  getMonthBannerClassname,
+  getSecondMonth,
+  getShadeForMeeting,
+  hasSecondMonth,
+  isMonthChange,
+  isUniqueMonth,
+  secondMonthIndex
+} from '../../utility/schedule/schedule';
 import {addMeeting, deleteMeeting, editMeeting, getAllMeetings} from "../../services/meetingService";
 
 @Component({
@@ -62,14 +82,11 @@ export class ScheduleComponent implements OnInit {
   }
 
   getMeetingsForDay(day: string) {
-    return this.filteredMeetings.filter(meeting => meeting.date === day);
+    return getMeetingsForDay(this.filteredMeetings, day);
   }
 
   isMonthChange(index: number): boolean {
-    if (index === 0) return false; // No change for the first day
-    const currentDay = this.days[index];
-    const previousDay = this.days[index - 1];
-    return this.getMonth(currentDay) !== this.getMonth(previousDay);
+    return isMonthChange(this.days, index);
   }
 
   getMonthForDay(day: string): string {
@@ -81,146 +98,55 @@ export class ScheduleComponent implements OnInit {
   }
 
   getMonthBannerClassname(index: number): string {
-    let widthClass = '';
-    if (this.hasSecondMonth()) {
-      if (index === 0) {
-        const index = this.secondMonthIndex();
-        switch (index) {
-          case 1:
-            widthClass = 'one';
-            break;
-          case 2:
-            widthClass = 'two';
-            break;
-          case 3:
-            widthClass = 'three';
-            break;
-          case 4:
-            widthClass = 'four';
-            break;
-          default:
-            widthClass = '';
-        }
-      }
-    }
-    return `month-banner ${widthClass}`;
+    return getMonthBannerClassname(this.days, index);
   }
 
   getFirstMonth(): string {
-    return formatMonthAndYear(this.getMonth(this.days[0]));
+    return getFirstMonth(this.days);
   }
 
   getSecondMonth(): string {
-    return formatMonthAndYear(this.getMonth(this.days[this.days.length - 1]));
+    return getSecondMonth(this.days);
   }
 
   hasSecondMonth(): boolean {
-    return this.getMonth(this.days[0]) !== this.getMonth(this.days[this.days.length - 1])
+    return hasSecondMonth(this.days);
   }
 
   secondMonthIndex(): number {
-    let index = 1;
-    this.days.forEach((day, i) => {
-      if (i != 0) {
-        if (this.getMonth(this.days[i]) !== this.getMonth(this.days[i - 1])) {
-          index = i;
-          return;
-        }
-      }
-    });
-    return index;
+    return secondMonthIndex(this.days);
   }
 
   isUniqueMonth(day: string, index: number): boolean {
-    return index === 0 || (index > 0 && this.getMonth(day) !== this.getMonth(this.days[index - 1]))
+    return isUniqueMonth(this.days, day, index);
   }
 
   assignColors() {
-    const uniquePersons = [...new Set(this.allMeetings.map(meeting => meeting.person))];
-    uniquePersons.forEach(person => {
-      // const color: string = getUniqueRandomColor(this.people);
-      //
-      const shades: Shades = {}
-      const uniqueTitlesPerPerson = [...new Set(this.filteredMeetings.filter(meeting => meeting.person === person).map(meeting => meeting.title))];
-
-      uniqueTitlesPerPerson.forEach(title => {
-        // shades[title] = getUniqueLightenedColor(shades, color);
-        shades[title] = 'cccccc';
-      });
-
-      this.people[person] = {
-        color: 'cccccc',
-        shades: shades
-      };
-    });
+    this.people = assignColors(this.allMeetings, this.filteredMeetings);
   }
 
   getShadeForMeeting(meeting: Meeting) {
-    return this.people[meeting.person].shades[meeting.title];
+    return getShadeForMeeting(this.people, meeting);
   }
 
   getMeetingsForTime(day: string, slotIndex: number) {
-    const slotTime: string = this.timeSlots[slotIndex].value;
-    const [slotHour, slotMinute] = slotTime.split(':');
-    const slotDate = new Date(day);
-    slotDate.setHours(parseInt(slotHour), parseInt(slotMinute));
-
-    return this.filteredMeetings.filter(meeting => {
-      if (meeting.date !== day) return false;
-
-      const [startHour, startMinute] = meeting.startTime.split(':').map(Number);
-
-      const meetingStartDate = new Date(day);
-      meetingStartDate.setHours(startHour, startMinute);
-
-      // Only return meetings that start exactly at this slot's time
-      return meetingStartDate.getHours() === slotDate.getHours() &&
-        meetingStartDate.getMinutes() === slotDate.getMinutes();
-    });
+    return getMeetingsForTime(this.filteredMeetings, this.timeSlots, day, slotIndex);
   }
 
   getMeetingTop(startTime: string, slotIndex: number): number {
-    const [hours, minutes] = startTime.split(':').map(Number);
-    return ((hours % 12) * 60 + minutes) - (slotIndex * 30);
+    return getMeetingTop(startTime, slotIndex);
   }
 
   getMeetingHeight(startTime: string, endTime: string, isMobile = false): number {
-    const [startHours, startMinutes] = startTime.split(':').map(Number);
-    const [endHours, endMinutes] = endTime.split(':').map(Number);
-    const startTotalMinutes: number = (startHours * 60) + startMinutes;
-    const endTotalMinutes: number = (endHours * 60) + endMinutes;
-    const durationMinutes = Math.max(0, endTotalMinutes - startTotalMinutes);
-
-    if (isMobile) {
-      const mobilePixelsPerMinute = 0.4;
-      const mobileMinHeight = 44;
-      const mobileMaxHeight = 112;
-
-      const scaledMobileHeight = Math.round(durationMinutes * mobilePixelsPerMinute);
-      return Math.min(mobileMaxHeight, Math.max(mobileMinHeight, scaledMobileHeight));
-    }
-
-    return durationMinutes;
+    return getMeetingHeight(startTime, endTime, isMobile);
   }
 
   formatTimeForDisplay(time: string): string {
-    const [hoursPart, minutesPart] = time.split(':');
-    const hours = Number(hoursPart);
-    const minutes = Number(minutesPart);
-
-    if (Number.isNaN(hours) || Number.isNaN(minutes)) {
-      return time;
-    }
-
-    const suffix = hours >= 12 ? 'PM' : 'AM';
-    const twelveHour = ((hours + 11) % 12) + 1;
-    const paddedMinutes = minutes.toString().padStart(2, '0');
-
-    return `${twelveHour}:${paddedMinutes} ${suffix}`;
+    return formatTimeForDisplay(time);
   }
 
   formatMeetingTimeRange(startTime: string, endTime: string): string {
-    return `${this.formatTimeForDisplay(startTime)} - ${this.formatTimeForDisplay(endTime)}`;
+    return formatMeetingTimeRange(startTime, endTime);
   }
 
   backwardArrowClick(): void {
@@ -238,11 +164,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   getMonth(date: string): string {
-    if (date.length > 6) {
-      return date.substring(0, 7); // Extracts the 'yyyy-MM' part
-    } else {
-      return ''
-    }
+    return getMonth(date);
   }
 
   async getMeetings() {
@@ -299,15 +221,8 @@ export class ScheduleComponent implements OnInit {
   }
 
   filterMeetings(): void {
-    this.personDropdownOptions = [this.defaultDropdownOption, ...this.getDistinctSortedPeople()]
-
-    this.filteredMeetings = this.allMeetings.filter(x => {
-      if (this.selectedValue == this.defaultDropdownOption) {
-        return true
-      } else {
-        return x.person == this.selectedValue
-      }
-    });
+    this.personDropdownOptions = buildPersonDropdownOptions(this.allMeetings, this.defaultDropdownOption);
+    this.filteredMeetings = filterMeetingsByPerson(this.allMeetings, this.selectedValue, this.defaultDropdownOption);
   }
 
   editMeetingPopup(meeting: Meeting): void {
@@ -319,7 +234,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   getDistinctSortedPeople(): string[] {
-    return Array.from(new Set(this.allMeetings.map(x => x.person))).sort();
+    return getDistinctSortedPeople(this.allMeetings);
   }
 
   async addMeetingCall(meeting: Meeting): Promise<void> {
